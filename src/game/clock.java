@@ -19,7 +19,8 @@ public abstract class clock {
          this.fpsCap = fpsCap;
          gameRunning = true;
          long lastLoopTime = System.nanoTime();
-         final long OPTIMAL_TIME = 1000000000 / fpsCap; 
+         long OPTIMAL_TIME = 0;
+         if (fpsCap != 0) {OPTIMAL_TIME = 1000000000 / fpsCap;}
          long lastFpsTime = 0;
          int fps = 0;
          init();
@@ -34,7 +35,6 @@ public abstract class clock {
              //If a second has passed since the last update, update the fps and reset the counters
              if (lastFpsTime >= 1000000000)
              {
-                System.out.println("FPS: "+fps+"");
                 this.fps = fps;
                 lastFpsTime = 0;
                 fps = 0;
@@ -44,10 +44,13 @@ public abstract class clock {
              // draw everyting
              BufferedFrame.frame.render();
              long sleepTime = OPTIMAL_TIME - (System.nanoTime() - lastLoopTime);
-             if (sleepTime < 999999 && sleepTime <= 0) {
+             if (fpsCap != 0) {
+             //Sleep until the next tick is scheduled to start
+             if (sleepTime < 999999 && sleepTime >= 0) {
                  try{Thread.sleep(5, (int)sleepTime);}catch(Exception e){System.out.println(e.getMessage());};
-             } else {
+             } else if (sleepTime >= 0) {
                  try{Thread.sleep(sleepTime/970000);}catch(Exception e){System.out.println(e.getMessage());};
+             }
              }
         }
     }
@@ -55,6 +58,7 @@ public abstract class clock {
     public void pause() {
         gameRunning = false;
     }
+    
     public void unpause() {
         start(fpsCap);
     }
