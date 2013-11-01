@@ -9,6 +9,10 @@ import java.awt.Image;
 import java.util.List;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+import resources.listener.DefaultKeylistener;
+import resources.listener.DefaultMouselistener;
+import resources.listener.Keylistener;
+import resources.listener.Mouselistener;
 
 /**
  * @author YellowLineSoftworks
@@ -26,6 +30,8 @@ public class BufferedFrame extends Frame {
     
     public BufferedFrame(int width, int height, String title) {
         frame = this;
+        frame.addMouseListener(new DefaultMouselistener());
+        frame.addKeyListener(new DefaultKeylistener());
         frame.setTitle(title);
         frame.setSize(width, height);
         frame.setVisible(true);
@@ -33,20 +39,23 @@ public class BufferedFrame extends Frame {
         buffer = frame.getBufferStrategy();
     }
     
-    public void enableFpsCounter(clock clock) {
-        this.clock = clock;
-        fpscounter = true;
-    }
-    
-    public void disableFpsCounter() {
-        fpscounter = false;
+    public BufferedFrame(int width, int height, String title, Mouselistener mouselisten, Keylistener keylisten) {
+        frame = this;
+        frame.addMouseListener(mouselisten);
+        frame.addKeyListener(keylisten);
+        frame.setTitle(title);
+        frame.setSize(width, height);
+        frame.setVisible(true);
+        frame.createBufferStrategy(2);
+        buffer = frame.getBufferStrategy();
     }
     
     public void render() {
         graphics = buffer.getDrawGraphics();
         graphics.setColor(new Color (255,255,255));
         graphics.fillRect(0, 0, frame.getWidth(), frame.getHeight());
-        for (Sprite temp : sprites) {
+        for (int c = 0; c < sprites.size(); c++) {
+            Sprite temp = sprites.get(c);
             graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
 	}
         if (fpscounter) {
@@ -165,9 +174,11 @@ public class BufferedFrame extends Frame {
     }
     
     public void removeImage(int id) {
-        for (Sprite temp: sprites) {
+        for (int c = 0; c < sprites.size(); c++) {
+            Sprite temp = sprites.get(c);
             if (temp.id == id) {
                 sprites.remove(temp);
+                System.out.println("Removed image");
             }
         }
     }
@@ -178,6 +189,15 @@ public class BufferedFrame extends Frame {
                 sprites.remove(temp);
             }
         }
+    }
+    
+    public void enableFpsCounter(clock clock) {
+        this.clock = clock;
+        fpscounter = true;
+    }
+    
+    public void disableFpsCounter() {
+        fpscounter = false;
     }
     
 }
