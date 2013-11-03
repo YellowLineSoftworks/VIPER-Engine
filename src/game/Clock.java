@@ -2,9 +2,11 @@ package game;
 
 import graphics.BufferedDevice;
 import graphics.awt.BufferedFrame;
+import graphics.swing.BufferedJFrame;
 
 /**
  * @author Xenith
+ * Currently 911 lines of code
  */
 public abstract class Clock {
     
@@ -23,6 +25,11 @@ public abstract class Clock {
     }
     
     public void start(int fpsCap, BufferedFrame frame) {
+         bufferedDevices = new BufferedDevice[]{frame};
+         start(fpsCap);
+    }
+    
+    public void start(int fpsCap, BufferedJFrame frame) {
          bufferedDevices = new BufferedDevice[]{frame};
          start(fpsCap);
     }

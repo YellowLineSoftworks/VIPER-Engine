@@ -1,14 +1,13 @@
-package graphics.awt;
+package graphics.swing;
 
 import game.Clock;
 import graphics.BufferedDevice;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Canvas;
-import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JPanel;
 import resources.Sprite;
 import resources.listener.DefaultKeylistener;
 import resources.listener.DefaultMouselistener;
@@ -18,16 +17,15 @@ import resources.listener.Mouselistener;
 /**
  * @author Jack
  */
-public class BufferedCanvas extends Canvas implements BufferedDevice {
-    
-    public static List<BufferedCanvas> canvases = new ArrayList();
+public class BufferedJPanel extends JPanel implements BufferedDevice {
+
+    public static List<BufferedJPanel> canvases = new ArrayList();
     private final List<Sprite> sprites = new ArrayList();
-    private BufferStrategy buffer;
     private Graphics graphics;
     private boolean fpscounter = false;
     private Clock clock;
     
-    public BufferedCanvas() {
+    public BufferedJPanel() {
         
         canvases.add(this);
         this.addMouseListener(new DefaultMouselistener());
@@ -37,7 +35,7 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         
     }
     
-    public BufferedCanvas(int width, int height) {
+    public BufferedJPanel(int width, int height) {
         
         this.setSize(width, height);
         canvases.add(this);
@@ -48,25 +46,18 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         
     }
     
-    public BufferedCanvas(int width, int height, Mouselistener mouselisten, Keylistener keylisten) {
+    public BufferedJPanel(int width, int height, Mouselistener mouselisten, Keylistener keylisten) {
         
         this.setSize(width, height);
         canvases.add(this);
         this.addMouseListener(mouselisten);
         this.addKeyListener(keylisten);
-        this.setIgnoreRepaint(true);
         this.setVisible(true);
         
     }
     
     @Override
-    public void render(){
-        
-        if (buffer == null) {
-            this.createBufferStrategy(2);
-            buffer = this.getBufferStrategy();
-        }
-        graphics = buffer.getDrawGraphics();
+    protected void paintComponent(Graphics graphics) {
         graphics.setColor(new Color (255,255,255));
         graphics.fillRect(0, 0, getWidth(), getHeight());
         for (int c = 0; c < sprites.size(); c++) {
@@ -76,9 +67,13 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         if (fpscounter) {
             graphics.setColor(new Color (0,0,0));
             graphics.drawString(clock.fps + "", 5, 15);
-        } 
-        graphics.dispose();
-        buffer.show();
+        }
+    }
+    
+    @Override
+    public void render(){
+        
+        this.repaint();
     
     }
     
