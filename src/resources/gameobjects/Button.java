@@ -12,10 +12,10 @@ public abstract class Button extends GameObject {
     
     public static List<Button> buttons = new ArrayList();  
     public static List<Button> pressedButtons = new ArrayList();
-    public int buttonType;
+    public String buttonType;
     private boolean pressed = false;
     
-    public Button(int x, int y, Sprite unclicked, Sprite clicked, int buttonType) {
+    public Button(int x, int y, Sprite unclicked, Sprite clicked, String buttonType) {
         super(x, y,new Sprite[]{unclicked, clicked});
         this.buttonType = buttonType;
         buttons.add(this);
@@ -38,6 +38,6 @@ public abstract class Button extends GameObject {
         clicked(buttonType);
     }
     
-    public abstract void clicked(int buttonType);
+    public abstract void clicked(String buttonType);
     
 }

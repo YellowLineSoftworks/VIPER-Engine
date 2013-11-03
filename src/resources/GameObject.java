@@ -1,6 +1,6 @@
 package resources;
 
-import graphics.BufferedFrame;
+import graphics.awt.BufferedFrame;
 import resources.Sprite;
 import java.util.List;
 import java.awt.Point;
