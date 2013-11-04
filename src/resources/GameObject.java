@@ -1,49 +1,133 @@
 package resources;
 
-import graphics.awt.BufferedFrame;
-import resources.Sprite;
+import graphics.BufferedDevice;
+import java.awt.Image;
 import java.util.List;
 import java.awt.Point;
 import java.util.ArrayList;
 
 /**
- * @author Xenith
+ * A parent class for GameObjects.
+ * @author Jack
+ * @version 1.3 Alpha
  */
 public class GameObject {
     
+    /**
+     * The GameObject identifier.
+     */
     public int id;
+    /**
+     * The location of the top-left corner of the object.
+     */
+    public Point location;
+    /**
+     * A list of all the GameObjects in the application.
+     */
+    public List<GameObject> objects = new ArrayList();
+    /**
+     * An array containing the sprites that the object can display.
+     */
+    public Sprite[] sprites;
+    /**
+     * The sprite that is currently being displayed.
+     */
+    public Sprite currentSprite;
     private int idcounter;
     private Point movement;
-    public int x;
-    public int y;
-    public Sprite[] sprites;
-    public List<GameObject> objects = new ArrayList();
-    public Sprite currentSprite;
-    private int spriteID;
+    private final BufferedDevice device;
     
-    public GameObject(int x, int y, Sprite[] sprites) {
+    /**
+     * Creates a new GameObject.
+     * @param x The x-coordinate of the top-left corner of the object.
+     * @param y The y-coordinate of the top-left corner of the object.
+     * @param images The images that the object can display.
+     * @param device The BufferedDevice which contains the object.
+     */
+    public GameObject(int x, int y, Image[] images, BufferedDevice device) {
+        this.device = device;
+        this.location = new Point(x,y);
+        this.sprites = new Sprite[images.length];
+        for (int c = 0; c < images.length; c++) {
+            sprites[c] = new Sprite(images[c], x, y);
+        }
         currentSprite = sprites[0];
-        this.x = x;
-        this.y = y;
-        this.sprites = sprites;
         objects.add(this);
-        spriteID = BufferedFrame.frame.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
-                currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2);
+        currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
+                currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
+    }
+    /**
+     * Creates a new GameObject.
+     * @param x The x-coordinate of the top-left corner of the object.
+     * @param y The y-coordinate of the top-left corner of the object.
+     * @param endx The x-coordinate of the bottom-right corner of the object.
+     * @param endy The y-coordinate of the bottom-right corner of the object.
+     * @param images The images that the object can display.
+     * @param device The BufferedDevice which contains the object.
+     */
+    public GameObject(int x, int y, int endx, int endy, Image[] images, BufferedDevice device) {
+        this.device = device;
+        this.location = new Point(x,y);
+        this.sprites = new Sprite[images.length];
+        for (int c = 0; c < images.length; c++) {
+            sprites[c] = new Sprite(images[c], x, y, endx, endy);
+        }
+        currentSprite = sprites[0];
+        objects.add(this);
+        currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
+                currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
     }
     
+    /**
+     * Creates a new GameObject.
+     * @param x The x-coordinate of the top-left corner of the object.
+     * @param y The y-coordinate of the top-left corner of the object.
+     * @param endx The x-coordinate of the bottom-right corner of the object.
+     * @param endy The y-coordinate of the bottom-right corner of the object.
+     * @param srcx1 The x-coordinate of the top-left corner of the source image.
+     * @param srcy1 The y-coordinate of the top-left corner of the source image.
+     * @param srcx2 The x-coordinate of the bottom-right corner of the source image.
+     * @param srcy2 The y-coordinate of the bottom-right corner of the source image.
+     * @param images The images that the object can display.
+     * @param device The BufferedDevice which contains the object.
+     */
+    public GameObject(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2, Image[] images, BufferedDevice device) {
+        this.device = device;
+        this.location = new Point(x,y);
+        this.sprites = new Sprite[images.length];
+        for (int c = 0; c < images.length; c++) {
+            sprites[c] = new Sprite(images[c], x, y, endx, endy, srcx1, srcy1, srcx2, srcy2);
+        }
+        currentSprite = sprites[0];
+        objects.add(this);
+        currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
+                currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
+    }
+    
+    /**
+     * Changes the currently displayed sprite.
+     * @param id The ID of the sprite to change to.
+     */
     public void changeSprite(int id) {
         currentSprite = sprites[id];
-        draw();
     }
     
+    /**
+     * Sets the movement of the object.
+     * @param x The value to add to the x-coordinate of the top-left corner each tick.
+     * @param y The value to add to the y-coordinate of the top-left corner each tick.
+     */
     public void setMovement(int x, int y) {
-        Point movement = new Point(x, y);
+        movement = new Point(x, y);
     }
     
+    /**
+     * Draw or redraw the object's current sprite on the frame.
+     */
     public void draw() {
-        BufferedFrame.frame.removeImage(spriteID);
-        spriteID = BufferedFrame.frame.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
-                currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2);
+        device.removeImage(currentSprite.id);
+        currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
+                currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
     }
     
 }

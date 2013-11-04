@@ -1,8 +1,9 @@
 package resources.listener;
 
 /**
- * @version 1.8 Alpha
- * @author YellowLineSoftworks
+ * A parent mouse listener class.
+ * @author Jack
+ * @version 1.3 Alpha
  */
 
 import java.awt.event.MouseListener;
@@ -11,10 +12,21 @@ import resources.gameobjects.Button;
 
 public abstract class Mouselistener implements MouseListener {
     
-    //Button holds the last mouse button pressed. Event holds the last event the mouse engendered.
+    /**
+     * The last mouse button pressed.
+     */
     public int button = -1;
+    /**
+     * The ID of the last action the mouse performed. 
+     * (1 = Exited, 2 = Entered, 3 = Released, 4 = Pressed, 5 = Clicked)
+     */
     public int event = 0;
     
+    /**
+     * Override function.
+     * @param evt 
+     * @deprecated Use {@link mouseExited()} instead.
+     */
     @Override
     public void mouseExited (MouseEvent evt) {
         button = evt.getButton();
@@ -22,6 +34,11 @@ public abstract class Mouselistener implements MouseListener {
         MouseExited();
     }
         
+    /**
+     * Override function.
+     * @param evt 
+     * @deprecated Use {@link mouseEntered()} instead.
+     */
     @Override
     public void mouseEntered (MouseEvent evt) {
         button = evt.getButton();
@@ -29,6 +46,11 @@ public abstract class Mouselistener implements MouseListener {
         MouseEntered();
     }
         
+    /**
+     * Override function.
+     * @param evt 
+     * @deprecated Use {@link mouseReleased()} instead.
+     */
     @Override
     public void mouseReleased (MouseEvent evt) {
         button = evt.getButton(); 
@@ -52,6 +74,11 @@ public abstract class Mouselistener implements MouseListener {
         MouseReleased();
     }
         
+    /**
+     * Override function.
+     * @param evt 
+     * @deprecated Use {@link mousePressed()} instead.
+     */
     @Override
     public void mousePressed (MouseEvent evt) {
         button = evt.getButton(); 
@@ -68,6 +95,11 @@ public abstract class Mouselistener implements MouseListener {
         MousePressed();
     }
         
+    /**
+     * Override function.
+     * @param evt 
+     * @deprecated Use {@link mouseClicked()} instead.
+     */
     @Override
     public void mouseClicked (MouseEvent evt) {
         button = evt.getButton();
@@ -75,13 +107,28 @@ public abstract class Mouselistener implements MouseListener {
         MouseClicked();
     }
     
+    /**
+     * Runs when the mouse exits the component.
+     */
     public abstract void MouseExited();
     
+    /**
+     * Runs when the mouse enters the component.
+     */
     public abstract void MouseEntered();
     
+    /**
+     * Runs when a mouse button is released.
+     */
     public abstract void MouseReleased();
     
+    /**
+     * Runs when a mouse button is clicked.
+     */
     public abstract void MouseClicked();
     
+    /**
+     * Runs when a mouse button is pressed.
+     */
     public abstract void MousePressed();
 }

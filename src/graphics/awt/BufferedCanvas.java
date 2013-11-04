@@ -16,10 +16,15 @@ import resources.listener.Keylistener;
 import resources.listener.Mouselistener;
 
 /**
+ * An extension of the Canvas class with built-in double-buffered
+ * image drawing and manipulation functions.
  * @author Jack
+ * @version 1.3 Alpha
  */
 public class BufferedCanvas extends Canvas implements BufferedDevice {
-    
+    /**
+     * A list of all the application's active canvases.
+     */
     public static List<BufferedCanvas> canvases = new ArrayList();
     private final List<Sprite> sprites = new ArrayList();
     private BufferStrategy buffer;
@@ -27,6 +32,10 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
     private boolean fpscounter = false;
     private Clock clock;
     
+    /**
+     * Creates a new BufferedCanvas. Uses the default size and 
+     * default mouse and key listeners.
+     */
     public BufferedCanvas() {
         
         canvases.add(this);
@@ -37,6 +46,12 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         
     }
     
+    /**
+     * Creates a new BufferedCanvas. Uses default mouse and key 
+     * listeners.
+     * @param width The width of the canvas.
+     * @param height The height of the canvas.
+     */
     public BufferedCanvas(int width, int height) {
         
         this.setSize(width, height);
@@ -48,6 +63,13 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         
     }
     
+    /**
+     * Creates a new BufferedCanvas.
+     * @param width The width of the canvas.
+     * @param height The height of the canvas.
+     * @param mouselisten The canvas's mouse listener.
+     * @param keylisten The canvas's key listener.
+     */
     public BufferedCanvas(int width, int height, Mouselistener mouselisten, Keylistener keylisten) {
         
         this.setSize(width, height);
@@ -59,6 +81,9 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         
     }
     
+    /**
+     * Renders a frame. Runs every time the game clock advances a tick.
+     */
     @Override
     public void render(){
         
@@ -82,32 +107,70 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
     
     }
     
+    /**
+     * Draws an image.
+     * @param image The image you want drawn.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     * @return The generated sprite containing the image identifier and the 
+     * display coordinates of the image.
+     */
     @Override
-    public int drawImage(Image image, int x, int y){
+    public Sprite drawImage(Image image, int x, int y){
     
         sprites.add(new Sprite(image, x, y));
         x += 0;
         y += 10;
-        return sprites.get(sprites.size() - 1).id;
+        return sprites.get(sprites.size() - 1);
     
     }
     
+    /**
+     * Draws an image.
+     * @param image The image you want drawn.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     * @param endx The x-value of the image's bottom-right corner on the destination frame.
+     * @param endy The y-value of the image's bottom-right corner on the destination frame.
+     * @return The generated sprite containing the image identifier and the 
+     * display coordinates of the image.
+     */
     @Override
-    public int drawImage(Image image, int x, int y, int endx, int endy) {
+    public Sprite drawImage(Image image, int x, int y, int endx, int endy) {
         sprites.add(new Sprite(image, x, y, endx, endy));
         x += 0;
         y += 10;
-        return sprites.get(sprites.size() - 1).id;
+        return sprites.get(sprites.size() - 1);
     }
     
+    /**
+     * Draws an image.
+     * @param image The image you want drawn.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     * @param endx The x-value of the image's bottom-right corner on the destination frame.
+     * @param endy The y-value of the image's bottom-right corner on the destination frame.
+     * @param srcx1 The x-value of the upper-left corner of the bounds on the source image.
+     * @param srcy1 The y-value of the upper-left corner of the bounds on the source image.
+     * @param srcx2 The x-value of the bottom-right corner of the bounds on the source image.
+     * @param srcy2 The y-value of the bottom-right corner of the bounds on the source image.
+     * @return The generated sprite containing the image identifier and the 
+     * display coordinates of the image.
+     */
     @Override
-    public int drawImage(Image image, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
+    public Sprite drawImage(Image image, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
         sprites.add(new Sprite(image, x, y, endx, endy, srcx1, srcy1, srcx2, srcy2));
         x += 0;
         y += 10;
-        return sprites.get(sprites.size() - 1).id;
+        return sprites.get(sprites.size() - 1);
     }
     
+    /**
+     * Moves an image.
+     * @param id The id of the image to be moved.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     */
     @Override
     public void moveImage(int id, int x, int y) {
         x += 0;
@@ -122,6 +185,14 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         }
     }
     
+    /**
+     * Moves an image.
+     * @param id The id of the image to be moved.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     * @param endx The x-value of the image's bottom-right corner on the destination frame.
+     * @param endy The y-value of the image's bottom-right corner on the destination frame.
+     */
     @Override
     public void moveImage(int id, int x, int y, int endx, int endy) {
         x += 0;
@@ -136,8 +207,20 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         }
     }
     
+    /**
+     * Moves an image.
+     * @param id The id of the image to be moved.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     * @param endx The x-value of the image's bottom-right corner on the destination frame.
+     * @param endy The y-value of the image's bottom-right corner on the destination frame.
+     * @param srcx1 The x-value of the upper-left corner of the bounds on the source image.
+     * @param srcy1 The y-value of the upper-left corner of the bounds on the source image.
+     * @param srcx2 The x-value of the bottom-right corner of the bounds on the source image.
+     * @param srcy2 The y-value of the bottom-right corner of the bounds on the source image.
+     */
     @Override
-    public void moveImage(int id, int x, int y, int endx, int endy, int srx1, int sry1, int srx2, int sry2) {
+    public void moveImage(int id, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
         x += 0;
         y += 10;
         for (Sprite temp: sprites) {
@@ -146,14 +229,20 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
                 temp.x2 = endx;
                 temp.y1 = y;
                 temp.y2 = endy;
-                temp.sx1 = srx1;
-                temp.sy1 = sry1;
-                temp.sx2 = srx2;
-                temp.sy2 = sry2;
+                temp.sx1 = srcx1;
+                temp.sy1 = srcy1;
+                temp.sx2 = srcx2;
+                temp.sy2 = srcy2;
             }
         }
     }
     
+    /**
+     * Moves an image.
+     * @param image The image to be moved.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     */
     @Override
     public void moveImage(Image image, int x, int y) {
         x += 0;
@@ -168,6 +257,14 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         }
     }
     
+    /**
+     * Moves an image.
+     * @param image The image to be moved.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     * @param endx The x-value of the image's lower-right corner on the destination frame.
+     * @param endy The y-value of the image's lower-right corner on the destination frame.
+     */
     @Override
     public void moveImage(Image image, int x, int y, int endx, int endy) {
         x += 0;
@@ -182,8 +279,20 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         }
     }
     
+    /**
+     * Moves an image.
+     * @param image The image to be moved.
+     * @param x The x-value of the image's upper-left corner on the destination frame.
+     * @param y The y-value of the image's upper-left corner on the destination frame.
+     * @param endx The x-value of the image's lower-right corner on the destination frame.
+     * @param endy The y-value of the image's lower-right corner on the destination frame.
+     * @param srcx1 The x-value of the upper-left corner of the bounds on the source image.
+     * @param srcy1 The y-value of the upper-left corner of the bounds on the source image.
+     * @param srcx2 The x-value of the bottom-right corner of the bounds on the source image.
+     * @param srcy2 The y-value of the bottom-right corner of the bounds on the source image.
+     */
     @Override
-    public void moveImage(Image image, int x, int y, int endx, int endy, int srx1, int sry1, int srx2, int sry2) {
+    public void moveImage(Image image, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
         x += 0;
         y += 10;
         for (Sprite temp: sprites) {
@@ -192,14 +301,18 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
                 temp.x2 = endx;
                 temp.y1 = y;
                 temp.y2 = endy;
-                temp.sx1 = srx1;
-                temp.sy1 = sry1;
-                temp.sx2 = srx2;
-                temp.sy2 = sry2;
+                temp.sx1 = srcx1;
+                temp.sy1 = srcy1;
+                temp.sx2 = srcx2;
+                temp.sy2 = srcy2;
             }
         }
     }
     
+    /**
+     * Removes an image.
+     * @param id The id of the image to be removed.
+     */
     @Override
     public void removeImage(int id) {
         for (int c = 0; c < sprites.size(); c++) {
@@ -210,6 +323,10 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         }
     }
     
+    /**
+     * Removes an image.
+     * @param img The image to be removed.
+     */
     @Override
     public void removeImage(Image img) {
         for (Sprite temp: sprites) {
@@ -219,12 +336,19 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         }
     }
     
+    /**
+     * Enables the device's FPS counter.
+     * @param clock The current game clock.
+     */
     @Override
     public void enableFpsCounter(Clock clock) {
         this.clock = clock;
         fpscounter = true;
     }
     
+    /**
+     * Disables the device's FPS counter.
+     */
     @Override
     public void disableFpsCounter() {
         fpscounter = false;

@@ -1,7 +1,9 @@
 package resources.listener;
 
 /**
- * @author Xenith
+ * A default key listener class. Contains empty functions.
+ * @author Jack
+ * @version 1.3 Alpha
  */
 public class DefaultKeylistener extends Keylistener {
 
