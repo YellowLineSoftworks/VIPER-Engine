@@ -112,8 +112,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
     @Override
     public Sprite drawImage(Image image, int x, int y) {
         sprites.add(new Sprite(image, x, y));
-        x += 8;
-        y += 30;
         return sprites.get(sprites.size() - 1);
     }
     
@@ -130,8 +128,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
     @Override
     public Sprite drawImage(Image image, int x, int y, int endx, int endy) {
         sprites.add(new Sprite(image, x, y, endx, endy));
-        x += 8;
-        y += 30;
         return sprites.get(sprites.size() - 1);
     }
     
@@ -152,8 +148,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
     @Override
     public Sprite drawImage(Image image, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
         sprites.add(new Sprite(image, x, y, endx, endy, srcx1, srcy1, srcx2, srcy2));
-        x += 8;
-        y += 30;
         return sprites.get(sprites.size() - 1);
     }
     
@@ -165,8 +159,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      */
     @Override
     public void moveImage(int id, int x, int y) {
-        x += 8;
-        y += 30;
         for (Sprite temp: sprites) {
             if (temp.id == id) {
                 temp.x1 = x;
@@ -187,8 +179,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      */
     @Override
     public void moveImage(int id, int x, int y, int endx, int endy) {
-        x += 8;
-        y += 30;
         for (Sprite temp: sprites) {
             if (temp.id == id) {
                 temp.x1 = x;
@@ -213,8 +203,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      */
     @Override
     public void moveImage(int id, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
-        x += 8;
-        y += 30;
         for (Sprite temp: sprites) {
             if (temp.id == id) {
                 temp.x1 = x;
@@ -237,8 +225,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      */
     @Override
     public void moveImage(Image image, int x, int y) {
-        x += 8;
-        y += 30;
         for (Sprite temp: sprites) {
             if (temp.image == image) {
                 temp.x1 = x;
@@ -259,8 +245,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      */
     @Override
     public void moveImage(Image image, int x, int y, int endx, int endy) {
-        x += 8;
-        y += 30;
         for (Sprite temp: sprites) {
             if (temp.image == image) {
                 temp.x1 = x;
@@ -285,8 +269,6 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      */
     @Override
     public void moveImage(Image image, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
-        x += 8;
-        y += 30;
         for (Sprite temp: sprites) {
             if (temp.image == image) {
                 temp.x1 = x;

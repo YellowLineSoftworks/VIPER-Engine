@@ -110,6 +110,7 @@ public class GameObject {
      */
     public void changeSprite(int id) {
         currentSprite = sprites[id];
+        draw();
     }
     
     /**

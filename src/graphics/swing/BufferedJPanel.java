@@ -77,6 +77,20 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     }
     
     /**
+     * Creates a new BufferedJPanel.
+     * @param mouselisten The panel's mouse listener.
+     * @param keylisten The panel's key listener.
+     */
+    public BufferedJPanel(Mouselistener mouselisten, Keylistener keylisten) {
+        
+        canvases.add(this);
+        this.addMouseListener(mouselisten);
+        this.addKeyListener(keylisten);
+        this.setVisible(true);
+        
+    }
+    
+    /**
      * Override for the panel's default function. Renders images
      * onto the panel.
      * @param graphics The panel's default Graphics object.

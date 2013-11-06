@@ -28,7 +28,7 @@ public abstract class Clock {
     /**
      * The BufferedDevices being used.
      */
-    private BufferedDevice[] bufferedDevices;
+    public BufferedDevice[] bufferedDevices;
     
     /**
      * This function runs when you start the application. Put your
