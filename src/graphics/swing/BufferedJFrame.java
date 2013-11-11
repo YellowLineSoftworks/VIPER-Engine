@@ -4,6 +4,8 @@ import game.Clock;
 import graphics.BufferedDevice;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
 import java.awt.Image;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import resources.listener.Mouselistener;
  * An extension of the JFrame class with built-in double-buffered
  * image drawing and manipulation functions.
  * @author Jack
- * @version 1.3 Alpha
+ * @version 1.4 Alpha
  */
 public class BufferedJFrame extends JFrame implements BufferedDevice {
     
@@ -27,10 +29,12 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
      * The application's active frame.
      */
     public static BufferedJFrame frame;
-    private final List<Sprite> sprites = new ArrayList();
-    private final BufferStrategy buffer;
+    protected List<Sprite> sprites = new ArrayList();
+    private BufferStrategy buffer;
     private Graphics graphics;
     private boolean fpscounter = false;
+    private boolean switching = false;
+    private boolean fullscreen = false;
     private Clock clock;
     private int x = 0;
     private int y = 0;
@@ -56,6 +60,7 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
         frame.setIgnoreRepaint(true);
         frame.createBufferStrategy(2);
         buffer = frame.getBufferStrategy();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
     /**
@@ -81,6 +86,7 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
         frame.setIgnoreRepaint(true);
         frame.createBufferStrategy(2);
         buffer = frame.getBufferStrategy();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
     /**
@@ -88,6 +94,7 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
      */
     @Override
     public void render() {
+        if (!switching) {
         graphics = buffer.getDrawGraphics();
         graphics.setColor(new Color (255,255,255));
         graphics.fillRect(0, 0, frame.getWidth(), frame.getHeight());
@@ -101,6 +108,7 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
         } 
         graphics.dispose();
         buffer.show();
+        }
     }
     
     /**
@@ -328,6 +336,49 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     @Override
     public void disableFpsCounter() {
         fpscounter = false;
+    }
+    
+    /**
+     * Enables fullscreen mode.
+     * @throws Exception If fullscreen is not supported, throws this exception.
+     */
+    public void enableFullscreenMode() throws Exception {
+        switching = true;
+        GraphicsConfiguration config = getGraphicsConfiguration();
+        GraphicsDevice myScreen = config.getDevice();
+        if (myScreen.isFullScreenSupported()) {
+            dispose();
+            setUndecorated(true);
+            setVisible(true);
+            myScreen.setFullScreenWindow(this);  
+        } else {
+            throw new Exception("GraphicsDevice " + myScreen.getIDstring() + " does not support fullscreen mode.");
+        }
+        fullscreen = true;
+        switching = false;
+    }
+    
+    /**
+     * Disables fullscreen mode.
+     */
+    public void disableFullscreenMode() {
+        switching = true;
+        GraphicsConfiguration config = getGraphicsConfiguration();
+        GraphicsDevice myScreen = config.getDevice();
+        dispose();
+        setUndecorated(false);
+        setVisible(true);
+        myScreen.setFullScreenWindow(null); 
+        fullscreen = false;
+        switching = false;
+    }
+    
+    /**
+     * Checks the current screen state.
+     * @return True if fullscreen, false if windowed.
+     */
+    public boolean isFullscreen() {
+        return fullscreen;
     }
 
 }

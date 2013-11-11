@@ -19,7 +19,7 @@ import resources.listener.Mouselistener;
  * An extension of the JPanel class with built-in double-buffered
  * image drawing and manipulation functions.
  * @author Jack
- * @version 1.3 Alpha
+ * @version 1.4 Alpha
  */
 public class BufferedJPanel extends JPanel implements BufferedDevice {
 

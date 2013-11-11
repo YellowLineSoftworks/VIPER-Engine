@@ -4,12 +4,12 @@ import graphics.BufferedDevice;
 import graphics.awt.BufferedFrame;
 import graphics.swing.BufferedJFrame;
 
-//VIPER is currently 2338 lines of code
+//VIPER is currently 2482 lines of code
 
 /**
  * The application time handler. Manages FPS and game ticks.
  * @author Jack
- * @version 1.3 Alpha
+ * @version 1.4 Alpha
  */
 public abstract class Clock {
     

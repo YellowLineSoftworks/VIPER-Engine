@@ -19,7 +19,7 @@ import resources.listener.Mouselistener;
  * An extension of the Canvas class with built-in double-buffered
  * image drawing and manipulation functions.
  * @author Jack
- * @version 1.3 Alpha
+ * @version 1.4 Alpha
  */
 public class BufferedCanvas extends Canvas implements BufferedDevice {
     /**

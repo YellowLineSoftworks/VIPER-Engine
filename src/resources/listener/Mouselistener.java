@@ -3,7 +3,7 @@ package resources.listener;
 /**
  * A parent mouse listener class.
  * @author Jack
- * @version 1.3 Alpha
+ * @version 1.4 Alpha
  */
 
 import java.awt.event.MouseListener;

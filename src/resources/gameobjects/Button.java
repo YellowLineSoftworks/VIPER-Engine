@@ -2,6 +2,8 @@ package resources.gameobjects;
 
 import graphics.BufferedDevice;
 import java.awt.Image;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import resources.GameObject;
@@ -9,9 +11,9 @@ import resources.GameObject;
 /**
  * The Button parent class.
  * @author Jack
- * @version 1.3 Alpha
+ * @version 1.4 Alpha
  */
-public abstract class Button extends GameObject {
+public class Button extends GameObject {
     
     /**
      * A list of all the buttons in the application.
@@ -21,11 +23,9 @@ public abstract class Button extends GameObject {
      * A list of all the currently depressed buttons in the application.
      */
     public static List<Button> pressedButtons = new ArrayList();
-    /**
-     * The type of the button. This corresponds to the function that 
-     * pressing the button runs.
-     */
-    public String buttonType;
+    private Method method;
+    private Object referenceObject = this;
+    private Object[] args = new Object[]{};
     private boolean pressed = false;
     
     /**
@@ -34,13 +34,31 @@ public abstract class Button extends GameObject {
      * @param y The y-coordinate of the top-left corner of the button.
      * @param unclicked The image to display when the button is not being clicked.
      * @param clicked The image to display when the button is being clicked.
-     * @param buttonType The button type. Corresponds to the function that pressing
-     * the button runs.
+     * @param method The method to run when the button is pressed.
      * @param device The BufferedDevice that contains the button.
      */
-    public Button(int x, int y, Image unclicked, Image clicked, String buttonType, BufferedDevice device) {
+    public Button(int x, int y, Image unclicked, Image clicked, Method method, BufferedDevice device) {
         super(x, y, new Image[]{unclicked, clicked}, device);
-        this.buttonType = buttonType;
+        this.method = method;
+        buttons.add(this);
+    }
+    
+    /**
+     * Creates a new Button.
+     * @param x The x-coordinate of the top-left corner of the button.
+     * @param y The y-coordinate of the top-left corner of the button.
+     * @param unclicked The image to display when the button is not being clicked.
+     * @param clicked The image to display when the button is being clicked.
+     * @param method The method to run when the button is pressed.
+     * @param object The object to call the method from.
+     * @param args The method arguments.
+     * @param device The BufferedDevice that contains the button.
+     */
+    public Button(int x, int y, Image unclicked, Image clicked, Method method, Object object, Object[] args, BufferedDevice device) {
+        super(x, y, new Image[]{unclicked, clicked}, device);
+        this.method = method;
+        this.referenceObject = object;
+        this.args = args;
         buttons.add(this);
     }
     
@@ -52,13 +70,34 @@ public abstract class Button extends GameObject {
      * @param endy The y-coordinate of the bottom-right corner of the button.
      * @param unclicked The image to display when the button is not being clicked.
      * @param clicked The image to display when the button is being clicked.
-     * @param buttonType The button type. Corresponds to the function that pressing
-     * the button runs.
+     * @param method The method to run when the button is pressed.
      * @param device The BufferedDevice that contains the button.
      */
-    public Button(int x, int y, int endx, int endy, Image unclicked, Image clicked, String buttonType, BufferedDevice device) {
+    public Button(int x, int y, int endx, int endy, Image unclicked, Image clicked, Method method, BufferedDevice device) {
         super(x, y, endx, endy, new Image[]{unclicked, clicked}, device);
-        this.buttonType = buttonType;
+        this.method = method;
+        buttons.add(this);
+    }
+    
+    
+    /**
+     * Creates a new Button.
+     * @param x The x-coordinate of the top-left corner of the button.
+     * @param y The y-coordinate of the top-left corner of the button.
+     * @param endx The x-coordinate of the bottom-right corner of the button.
+     * @param endy The y-coordinate of the bottom-right corner of the button.
+     * @param unclicked The image to display when the button is not being clicked.
+     * @param clicked The image to display when the button is being clicked.
+     * @param method The method to run when the button is pressed.
+     * @param object The object to call the method from.
+     * @param args The method arguments.
+     * @param device The BufferedDevice that contains the button.
+     */
+    public Button(int x, int y, int endx, int endy, Image unclicked, Image clicked, Method method, Object object, Object[] args, BufferedDevice device) {
+        super(x, y, endx, endy, new Image[]{unclicked, clicked}, device);
+        this.method = method;
+        this.referenceObject = object;
+        this.args = args;
         buttons.add(this);
     }
     
@@ -74,13 +113,37 @@ public abstract class Button extends GameObject {
      * @param srcy2 The y-coordinate of the bottom-right corner of the source button.
      * @param unclicked The image to display when the button is not being clicked.
      * @param clicked The image to display when the button is being clicked.
-     * @param buttonType The button type. Corresponds to the function that pressing
-     * the button runs.
+     * @param method The method to run when the button is pressed.
      * @param device The BufferedDevice that contains the button.
      */
-    public Button(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2, Image unclicked, Image clicked, String buttonType, BufferedDevice device) {
+    public Button(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2, Image unclicked, Image clicked, Method method, BufferedDevice device) {
         super(x, y, endx, endy, srcx1, srcy1, srcx2, srcy2, new Image[]{unclicked, clicked}, device);
-        this.buttonType = buttonType;
+        this.method = method;
+        buttons.add(this);
+    }
+    
+    /**
+     * Creates a new Button.
+     * @param x The x-coordinate of the top-left corner of the button.
+     * @param y The y-coordinate of the top-left corner of the button.
+     * @param endx The x-coordinate of the bottom-right corner of the button.
+     * @param endy The y-coordinate of the bottom-right corner of the button.
+     * @param srcx1 The x-coordinate of the top-left corner of the source button.
+     * @param srcy1 The y-coordinate of the top-left corner of the source button.
+     * @param srcx2 The x-coordinate of the bottom-right corner of the source button.
+     * @param srcy2 The y-coordinate of the bottom-right corner of the source button.
+     * @param unclicked The image to display when the button is not being clicked.
+     * @param clicked The image to display when the button is being clicked.
+     * @param method The method to run when the button is pressed.
+     * @param object The object to call the method from.
+     * @param args The method arguments.
+     * @param device The BufferedDevice that contains the button.
+     */
+    public Button(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2, Image unclicked, Image clicked, Method method, Object object, Object[] args, BufferedDevice device) {
+        super(x, y, endx, endy, srcx1, srcy1, srcx2, srcy2, new Image[]{unclicked, clicked}, device);
+        this.method = method;
+        this.referenceObject = object;
+        this.args = args;
         buttons.add(this);
     }
     
@@ -107,13 +170,9 @@ public abstract class Button extends GameObject {
     public void buttonReleased() {
         pressed = false;
         changeSprite(0);
-        clicked(buttonType);
+        try{method.invoke(referenceObject, args);} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
+            System.err.println("Error invoking method " + method.getName() + " in class " + method.getDeclaringClass().getSimpleName());
+            System.err.println(e.getMessage()); 
+        }
     }
-    
-    /**
-     * Executes upon the button being clicked.
-     * @param buttonType The type of the button that was clicked.
-     */
-    public abstract void clicked(String buttonType);
-    
 }

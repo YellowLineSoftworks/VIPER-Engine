@@ -8,7 +8,7 @@ import resources.Sprite;
  * BufferedDevices are GUI components with built-in image drawing
  * and manipulation functions.
  * @author Jack
- * @version 1.3 Alpha
+ * @version 1.4 Alpha
  */
 public interface BufferedDevice {
     
