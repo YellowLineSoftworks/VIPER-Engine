@@ -116,4 +116,61 @@ public class Sprite {
         id = idCounter++;
     }
     
+    /**
+     * Moves the sprite.
+     * @param x The x-coordinate of the top-left corner of the destination.
+     * @param y The y-coordinate of the bottom-right corner of the destination.
+     */
+    public void move(int x, int y) {
+        x1 = x;
+        x2 = image.getWidth(null) + x;
+        y1 = y;
+        y2 = image.getHeight(null) + y;
+        sx1 = 0;
+        sy1 = 0;
+        sx2 = image.getWidth(null);
+        sy2 = image.getHeight(null);
+    }
+    
+    
+    /**
+     * Moves the sprite.
+     * @param x The x-coordinate of the top-left corner of the destination.
+     * @param y The y-coordinate of the bottom-right corner of the destination.
+     * @param endx The x-coordinate of the bottom-right corner of the destination.
+     * @param endy The y-coordinate of the bottom-right corner of the destination.
+     */
+    public void move(int x, int y, int endx, int endy) {
+        x1 = x;
+        x2 = endx;
+        y1 = y;
+        y2 = endy;
+        sx1 = 0;
+        sy1 = 0;
+        sx2 = image.getWidth(null);
+        sy2 = image.getHeight(null);
+    }
+    
+    /**
+     * Moves the sprite.
+     * @param x The x-coordinate of the top-left corner of the destination.
+     * @param y The y-coordinate of the top-left corner of the destination.
+     * @param endx The x-coordinate of the bottom-right corner of the destination.
+     * @param endy The y-coordinate of the bottom-right corner of the destination.
+     * @param srcx1 The x-coordinate of the top-left corner of the source.
+     * @param srcy1 The y-coordinate of the top-left corner of the source.
+     * @param srcx2 The x-coordinate of the bottom-right corner of the source.
+     * @param srcy2 The y-coordinate of the bottom-right corner of the source.
+     */
+    public void move(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
+        x1 = x;
+        x2 = endx;
+        y1 = y;
+        y2 = endy;
+        sx1 = srcx1;
+        sy1 = srcy1;
+        sx2 = srcx2;
+        sy2 = srcy2;        
+    }
+    
 }

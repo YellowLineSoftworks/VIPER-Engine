@@ -26,10 +26,10 @@ public abstract class Keylistener implements KeyListener {
    * @deprecated Use {@link keyPressed()} instead.
    */
   @Override
-  public synchronized void keyPressed( KeyEvent e ) {
+  public void keyPressed( KeyEvent e ) {
     key = e.getKeyCode();
     keydown = true;
-    keyPressed();
+    KeyPressed(e);
   }
   
   /**
@@ -38,10 +38,10 @@ public abstract class Keylistener implements KeyListener {
    * @deprecated Use {@link keyReleased()} instead.
    */
   @Override
-  public synchronized void keyReleased( KeyEvent e ) {
+  public void keyReleased( KeyEvent e ) {
     key = e.getKeyCode();
     keydown = false;
-    keyReleased();
+    KeyReleased(e);
   }
   
   /**
@@ -52,22 +52,25 @@ public abstract class Keylistener implements KeyListener {
   @Override
   public void keyTyped( KeyEvent e ) {
     key = e.getKeyCode();
-    keyTyped();
+    KeyTyped(e);
   }
   
   /**
    * Runs when a key is pressed.
+   * @param e The KeyEvent that is passed in.
    */
-  public abstract void keyPressed();
+  public abstract void KeyPressed(KeyEvent e);
   
   /**
    * Runs when a key is released.
+   * @param e The KeyEvent that is passed in.
    */
-  public abstract void keyReleased();
+  public abstract void KeyReleased(KeyEvent e);
   
   /**
    * Runs when a key is typed.
+   * @param e The KeyEvent that is passed in.
    */
-  public abstract void keyTyped();
+  public abstract void KeyTyped(KeyEvent e);
     
 }

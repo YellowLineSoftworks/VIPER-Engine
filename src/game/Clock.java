@@ -11,12 +11,8 @@ import graphics.swing.BufferedJFrame;
  * @author Jack
  * @version 1.4 Alpha
  */
-public abstract class Clock {
+public abstract class Clock implements Runnable{
     
-    /**
-     * Describes the application's runtime state
-     */
-    public boolean applicationRunning = true;
     /**
      * The application's current FPS cap.
      */
@@ -29,6 +25,9 @@ public abstract class Clock {
      * The BufferedDevices being used.
      */
     public BufferedDevice[] bufferedDevices;
+    
+    private boolean initialized = false, threadRunning = true;
+    private Thread main;
     
     /**
      * This function runs when you start the application. Put your
@@ -85,15 +84,69 @@ public abstract class Clock {
              bufferedDevices = new BufferedDevice[]{new BufferedJFrame(0,0, 750, 750, "VIPER 1.3 Alpha")};
          }
          this.fpsCap = fpsCap;
-         applicationRunning = true;
+         main = new Thread(this);
+         main.start();
+    }
+    
+    /**
+     * Pauses the application's runtime.
+     */
+    public void pause() {
+        threadRunning = false;
+    }
+    
+    /**
+     * Resumes the application's runtime.
+     */
+    public void unpause() {
+        main = new Thread(this);
+        threadRunning = true;
+        main.start();
+    }
+    
+    /**
+     * Adds a BufferedDevice to the display system.
+     * @param device The device to add.
+     */
+    public void addBufferedDevice(BufferedDevice device) {
+        BufferedDevice[] bufferedDevicesNew = new BufferedDevice[bufferedDevices.length + 1];
+        int c = 0;
+        for(BufferedDevice temp: bufferedDevices) {
+            bufferedDevicesNew[c] = temp;
+            c++;
+        }
+        bufferedDevicesNew[bufferedDevices.length] = device;
+        bufferedDevices = bufferedDevicesNew;
+    }
+    
+    /**
+     * Removes a BufferedDevice from the display system.
+     * @param device The device to remove.
+     */
+    public void removeBufferedDevice(BufferedDevice device) {
+        BufferedDevice[] bufferedDevicesNew = new BufferedDevice[bufferedDevices.length - 1];
+        int c = 0;
+        for(BufferedDevice temp: bufferedDevices) {
+            if (temp != device) {
+                bufferedDevicesNew[c] = temp;
+                c++;
+            }
+        }
+        bufferedDevices = bufferedDevicesNew;
+    }
+
+    @Override
+    public void run() {
          long lastLoopTime = System.nanoTime();
          long OPTIMAL_TIME = 0;
          if (fpsCap != 0) {OPTIMAL_TIME = 1000000000 / fpsCap;}
          long lastFpsTime = 0;
          int fps = 0;
-         init();
-         while (applicationRunning)
-         {
+         if (!initialized) {
+            init();
+            initialized = true;
+         }
+        do {
              //Check the current time, save it
              long now = System.nanoTime();
              long updateLength = now - lastLoopTime;
@@ -115,28 +168,14 @@ public abstract class Clock {
              }
              long sleepTime = OPTIMAL_TIME - (System.nanoTime() - lastLoopTime);
              if (fpsCap != 0) {
-             //Sleep until the next tick is scheduled to start
-             if (sleepTime < 999999 && sleepTime >= 0) {
-                 try{Thread.sleep(5, (int)sleepTime);}catch(InterruptedException e){System.out.println(e.getMessage());};
-             } else if (sleepTime >= 0) {
-                 try{Thread.sleep(sleepTime/970000);}catch(InterruptedException e){System.out.println(e.getMessage());};
+                //Sleep until the next tick is scheduled to start
+                if (sleepTime < 999999 && sleepTime >= 0) {
+                    try{Thread.sleep(5, (int)sleepTime);}catch(InterruptedException e){System.out.println(e.getMessage());};
+                } else if (sleepTime >= 0) {
+                    try{Thread.sleep(sleepTime/970000);}catch(InterruptedException e){System.out.println(e.getMessage());};
+                }
              }
-             }
-        }
-    }
-    
-    /**
-     * Pauses the application's runtime.
-     */
-    public void pause() {
-        applicationRunning = false;
-    }
-    
-    /**
-     * Resumes the application's runtime.
-     */
-    public void unpause() {
-        start(fpsCap);
+        } while (threadRunning);
     }
     
 }

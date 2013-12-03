@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+import resources.ResolutionCalculator;
 import resources.Sprite;
 import resources.listener.DefaultKeylistener;
 import resources.listener.DefaultMouselistener;
@@ -24,6 +25,7 @@ import resources.listener.Mouselistener;
 public class BufferedJPanel extends JPanel implements BufferedDevice {
 
     public static List<BufferedJPanel> canvases = new ArrayList();
+    public ResolutionCalculator calc = null;
     private final List<Sprite> sprites = new ArrayList();
     private Graphics graphics;
     private boolean fpscounter = false;
@@ -102,7 +104,11 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
         graphics.fillRect(0, 0, getWidth(), getHeight());
         for (int c = 0; c < sprites.size(); c++) {
             Sprite temp = sprites.get(c);
-            graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            if (calc != null) {
+                graphics.drawImage(temp.image, calc.calcForX(temp.x1), calc.calcForY(temp.y1), calc.calcForX(temp.x2), calc.calcForY(temp.y2), temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            } else {
+                graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            }
 	}
         if (fpscounter) {
             graphics.setColor(new Color (0,0,0));
@@ -365,6 +371,15 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     @Override
     public void disableFpsCounter() {
         fpscounter = false;
+    }
+    
+    
+    /**
+     * Tells the panel to use a ResolutionCalculator to adjust the where things are displayed.
+     * @param calc The ResolutionCalculator to use.
+     */
+    public void useResolutionCalculator(ResolutionCalculator calc) {
+        this.calc = calc;
     }
 
 }

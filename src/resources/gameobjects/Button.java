@@ -39,6 +39,7 @@ public class Button extends GameObject {
      */
     public Button(int x, int y, Image unclicked, Image clicked, Method method, BufferedDevice device) {
         super(x, y, new Image[]{unclicked, clicked}, device);
+        draw();
         this.method = method;
         buttons.add(this);
     }
@@ -56,6 +57,7 @@ public class Button extends GameObject {
      */
     public Button(int x, int y, Image unclicked, Image clicked, Method method, Object object, Object[] args, BufferedDevice device) {
         super(x, y, new Image[]{unclicked, clicked}, device);
+        draw();
         this.method = method;
         this.referenceObject = object;
         this.args = args;
@@ -75,6 +77,7 @@ public class Button extends GameObject {
      */
     public Button(int x, int y, int endx, int endy, Image unclicked, Image clicked, Method method, BufferedDevice device) {
         super(x, y, endx, endy, new Image[]{unclicked, clicked}, device);
+        draw();
         this.method = method;
         buttons.add(this);
     }
@@ -95,6 +98,7 @@ public class Button extends GameObject {
      */
     public Button(int x, int y, int endx, int endy, Image unclicked, Image clicked, Method method, Object object, Object[] args, BufferedDevice device) {
         super(x, y, endx, endy, new Image[]{unclicked, clicked}, device);
+        draw();
         this.method = method;
         this.referenceObject = object;
         this.args = args;
@@ -118,6 +122,7 @@ public class Button extends GameObject {
      */
     public Button(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2, Image unclicked, Image clicked, Method method, BufferedDevice device) {
         super(x, y, endx, endy, srcx1, srcy1, srcx2, srcy2, new Image[]{unclicked, clicked}, device);
+        draw();
         this.method = method;
         buttons.add(this);
     }
@@ -141,6 +146,7 @@ public class Button extends GameObject {
      */
     public Button(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2, Image unclicked, Image clicked, Method method, Object object, Object[] args, BufferedDevice device) {
         super(x, y, endx, endy, srcx1, srcy1, srcx2, srcy2, new Image[]{unclicked, clicked}, device);
+        draw();
         this.method = method;
         this.referenceObject = object;
         this.args = args;

@@ -8,9 +8,11 @@ package resources.listener;
 
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import resources.ResolutionCalculator;
 import resources.gameobjects.Button;
 
 public abstract class Mouselistener implements MouseListener {
+    
     
     /**
      * The last mouse button pressed.
@@ -21,6 +23,7 @@ public abstract class Mouselistener implements MouseListener {
      * (1 = Exited, 2 = Entered, 3 = Released, 4 = Pressed, 5 = Clicked)
      */
     public int event = 0;
+    private ResolutionCalculator calc = null;
     
     /**
      * Override function.
@@ -31,7 +34,7 @@ public abstract class Mouselistener implements MouseListener {
     public void mouseExited (MouseEvent evt) {
         button = evt.getButton();
         event = 1;
-        MouseExited();
+        MouseExited(evt);
     }
         
     /**
@@ -43,7 +46,7 @@ public abstract class Mouselistener implements MouseListener {
     public void mouseEntered (MouseEvent evt) {
         button = evt.getButton();
         event = 2;
-        MouseEntered();
+        MouseEntered(evt);
     }
         
     /**
@@ -57,8 +60,13 @@ public abstract class Mouselistener implements MouseListener {
         event = 3;
         int x = evt.getX();
         int y = evt.getY();
+        if(calc != null) {
+            x = calc.reverseCalcForX(x);
+            y = calc.reverseCalcForY(y);
+        }
         boolean found = false;
-        for(Button temp: Button.buttons) {
+        for(int c = 0; c < Button.buttons.size(); c++) {
+            Button temp = Button.buttons.get(c);
             if (temp.currentSprite.x1 <= x && temp.currentSprite.x2 >= x && !found) {
                 if (temp.currentSprite.y1 <= y && temp.currentSprite.y2 >= y) {
                     temp.buttonReleased();
@@ -71,7 +79,7 @@ public abstract class Mouselistener implements MouseListener {
                 temp.resetButtonState();
             }
         }
-        MouseReleased();
+        MouseReleased(evt);
     }
         
     /**
@@ -81,10 +89,15 @@ public abstract class Mouselistener implements MouseListener {
      */
     @Override
     public void mousePressed (MouseEvent evt) {
+        
         button = evt.getButton(); 
         event = 4;
         int x = evt.getX();
         int y = evt.getY();
+        if(calc != null) {
+            x = calc.reverseCalcForX(x);
+            y = calc.reverseCalcForY(y);
+        }
         for(Button temp: Button.buttons) {
             if (temp.currentSprite.x1 <= x && temp.currentSprite.x2 >= x) {
                 if (temp.currentSprite.y1 <= y && temp.currentSprite.y2 >= y) {
@@ -92,7 +105,7 @@ public abstract class Mouselistener implements MouseListener {
                 }
             }
         }
-        MousePressed();
+        MousePressed(evt);
     }
         
     /**
@@ -104,31 +117,44 @@ public abstract class Mouselistener implements MouseListener {
     public void mouseClicked (MouseEvent evt) {
         button = evt.getButton();
         event = 5;
-        MouseClicked();
+        MouseClicked(evt);
     }
     
     /**
      * Runs when the mouse exits the component.
+     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
      */
-    public abstract void MouseExited();
+    public abstract void MouseExited(MouseEvent evt);
     
     /**
      * Runs when the mouse enters the component.
+     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
      */
-    public abstract void MouseEntered();
+    public abstract void MouseEntered(MouseEvent evt);
     
     /**
      * Runs when a mouse button is released.
+     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
      */
-    public abstract void MouseReleased();
+    public abstract void MouseReleased(MouseEvent evt);
     
     /**
      * Runs when a mouse button is clicked.
+     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
      */
-    public abstract void MouseClicked();
+    public abstract void MouseClicked(MouseEvent evt);
     
     /**
      * Runs when a mouse button is pressed.
+     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
      */
-    public abstract void MousePressed();
+    public abstract void MousePressed(MouseEvent evt);
+    
+    /**
+     * Causes the MouseListener to use a ResolutionCalculator to adjust mouse locations. Note: The x and y coordinates in the child class'
+     * handling functions will not be affected by the ResolutionCalculator, and will have to adjust any X and Y coordinates accordingly.
+     */
+    public void addResolutionCalculator(ResolutionCalculator calc) {
+        this.calc = calc;
+    }
 }

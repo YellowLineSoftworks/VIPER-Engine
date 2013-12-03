@@ -3,15 +3,19 @@ package graphics.awt;
 import resources.Sprite;
 import game.Clock;
 import graphics.BufferedDevice;
+import static graphics.swing.BufferedJFrame.frame;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.util.List;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import resources.ResolutionCalculator;
 import resources.listener.DefaultKeylistener;
 import resources.listener.DefaultMouselistener;
 import resources.listener.Keylistener;
@@ -29,6 +33,7 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      * The application's active frame.
      */
     public static BufferedFrame frame;
+    public ResolutionCalculator calc = null;
     private final List<Sprite> sprites = new ArrayList();
     private BufferStrategy buffer;
     private Graphics graphics;
@@ -96,7 +101,11 @@ public class BufferedFrame extends Frame implements BufferedDevice {
         graphics.fillRect(0, 0, frame.getWidth(), frame.getHeight());
         for (int c = 0; c < sprites.size(); c++) {
             Sprite temp = sprites.get(c);
-            graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            if (calc != null) {
+                graphics.drawImage(temp.image, calc.calcForX(temp.x1), calc.calcForY(temp.y1), calc.calcForX(temp.x2), calc.calcForY(temp.y2), temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            } else {
+                graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            }
 	}
         if (fpscounter) {
             graphics.setColor(new Color (0,0,0));
@@ -317,6 +326,23 @@ public class BufferedFrame extends Frame implements BufferedDevice {
     }
     
     /**
+     * Centers the frame on the screen.
+     */
+    public void centerFrame() {
+        GraphicsConfiguration config = new JFrame().getGraphicsConfiguration();
+        Rectangle screen = config.getBounds();
+        frame.setLocation(((screen.width / 2) - (getWidth() / 2)), ((screen.height / 2) - (getHeight() / 2)));
+    }
+    
+    /**
+     * Retrieves the screen's dimensions.
+     * @return The screen's dimensions.
+     */
+    public Rectangle getScreenDimensions() {
+        return getGraphicsConfiguration().getBounds();
+    }
+    
+    /**
      * Enables the device's FPS counter.
      * @param clock The current game clock.
      */
@@ -380,6 +406,14 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      */
     public boolean isFullscreen() {
         return fullscreen;
+    }
+    
+    /**
+     * Tells the frame to use a ResolutionCalculator to adjust the where things are displayed.
+     * @param calc The ResolutionCalculator to use.
+     */
+    public void useResolutionCalculator(ResolutionCalculator calc) {
+        this.calc = calc;
     }
     
 }

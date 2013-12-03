@@ -7,10 +7,12 @@ import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import resources.ResolutionCalculator;
 import resources.Sprite;
 import resources.listener.DefaultKeylistener;
 import resources.listener.DefaultMouselistener;
@@ -29,7 +31,10 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
      * The application's active frame.
      */
     public static BufferedJFrame frame;
+    public ResolutionCalculator calc = null;
     protected List<Sprite> sprites = new ArrayList();
+    private Mouselistener mouselisten;
+    private Keylistener keylisten;
     private BufferStrategy buffer;
     private Graphics graphics;
     private boolean fpscounter = false;
@@ -72,16 +77,20 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
      * @param title The title of the frame.
      * @param mouselisten The frame's mouse listener.
      * @param keylisten The frame's key listener.
+     * @param undecorated Whether or not the frame should be undecorated.
      */
-    public BufferedJFrame(int x, int y, int width, int height, String title, Mouselistener mouselisten, Keylistener keylisten) {
+    public BufferedJFrame(int x, int y, int width, int height, String title, Mouselistener mouselisten, Keylistener keylisten, boolean undecorated) {
         this.x = x;
         this.y = y;
         frame = this;
         frame.setLocation(x, y);
         frame.addMouseListener(mouselisten);
+        this.mouselisten = mouselisten;
         frame.addKeyListener(keylisten);
+        this.keylisten = keylisten;
         frame.setTitle(title);
         frame.setSize(width, height);
+        frame.setUndecorated(undecorated);
         frame.setVisible(true);
         frame.setIgnoreRepaint(true);
         frame.createBufferStrategy(2);
@@ -100,7 +109,11 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
         graphics.fillRect(0, 0, frame.getWidth(), frame.getHeight());
         for (int c = 0; c < sprites.size(); c++) {
             Sprite temp = sprites.get(c);
-            graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            if (calc != null) {
+                graphics.drawImage(temp.image, calc.calcForX(temp.x1), calc.calcForY(temp.y1), calc.calcForX(temp.x2), calc.calcForY(temp.y2), temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            } else {
+                graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            }
 	}
         if (fpscounter) {
             graphics.setColor(new Color (0,0,0));
@@ -321,6 +334,23 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     }
     
     /**
+     * Centers the frame on the screen.
+     */
+    public void centerFrame() {
+        GraphicsConfiguration config = getGraphicsConfiguration();
+        Rectangle screen = config.getBounds();
+        frame.setLocation(((screen.width / 2) - (getWidth() / 2)), ((screen.height / 2) - (getHeight() / 2)));
+    }
+    
+    /**
+     * Retrieves the screen's dimensions.
+     * @return The screen's dimensions.
+     */
+    public Rectangle getScreenDimensions() {
+        return getGraphicsConfiguration().getBounds();
+    }
+    
+    /**
      * Enables the device's FPS counter.
      * @param clock The current game clock.
      */
@@ -380,5 +410,13 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     public boolean isFullscreen() {
         return fullscreen;
     }
-
+    
+    /**
+     * Tells the frame to use a ResolutionCalculator to adjust the where things are displayed.
+     * @param calc The ResolutionCalculator to use.
+     */
+    public void useResolutionCalculator(ResolutionCalculator calc) {
+        this.calc = calc;
+    }
+  
 }

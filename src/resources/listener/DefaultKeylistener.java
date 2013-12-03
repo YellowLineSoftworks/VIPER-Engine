@@ -1,5 +1,7 @@
 package resources.listener;
 
+import java.awt.event.KeyEvent;
+
 /**
  * A default key listener class. Contains empty functions.
  * @author Jack
@@ -8,17 +10,16 @@ package resources.listener;
 public class DefaultKeylistener extends Keylistener {
 
   @Override
-  public void keyPressed() {
+  public void KeyPressed(KeyEvent evt) {
+  }
+  
+  @Override
+  public void KeyReleased(KeyEvent evt){
       
   }
   
   @Override
-  public void keyReleased(){
-      
-  }
-  
-  @Override
-  public void keyTyped(){
+  public void KeyTyped(KeyEvent evt){
       
   }
   
