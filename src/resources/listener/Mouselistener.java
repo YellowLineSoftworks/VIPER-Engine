@@ -28,7 +28,7 @@ public abstract class Mouselistener implements MouseListener {
     /**
      * Override function.
      * @param evt 
-     * @deprecated Use {@link mouseExited()} instead.
+     * @deprecated Use {@link MouseExited()} instead.
      */
     @Override
     public void mouseExited (MouseEvent evt) {
@@ -40,7 +40,7 @@ public abstract class Mouselistener implements MouseListener {
     /**
      * Override function.
      * @param evt 
-     * @deprecated Use {@link mouseEntered()} instead.
+     * @deprecated Use {@link MouseEntered()} instead.
      */
     @Override
     public void mouseEntered (MouseEvent evt) {
@@ -52,7 +52,7 @@ public abstract class Mouselistener implements MouseListener {
     /**
      * Override function.
      * @param evt 
-     * @deprecated Use {@link mouseReleased()} instead.
+     * @deprecated Use {@link MouseReleased()} instead.
      */
     @Override
     public void mouseReleased (MouseEvent evt) {
@@ -85,7 +85,7 @@ public abstract class Mouselistener implements MouseListener {
     /**
      * Override function.
      * @param evt 
-     * @deprecated Use {@link mousePressed()} instead.
+     * @deprecated Use {@link MousePressed()} instead.
      */
     @Override
     public void mousePressed (MouseEvent evt) {
@@ -111,7 +111,7 @@ public abstract class Mouselistener implements MouseListener {
     /**
      * Override function.
      * @param evt 
-     * @deprecated Use {@link mouseClicked()} instead.
+     * @deprecated Use {@link MouseClicked()} instead.
      */
     @Override
     public void mouseClicked (MouseEvent evt) {

@@ -39,7 +39,21 @@ public class GameObject {
     private final BufferedDevice device;
     
     /**
-     * Creates a new GameObject.
+     * Creates a new GameObject. Remember to call the superconstructor when extending this class.
+     * @param device The BufferedDevice which contains the object.
+     */
+    public GameObject(BufferedDevice device) {
+        this.device = device;
+        this.location = new Point(0,0);
+        this.sprites = new Sprite[0];
+        currentSprite = null;
+        objects.add(this);
+        //Currently does not automatically draw the image.
+        //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
+        //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
+    }
+    /**
+     * Creates a new GameObject. Remember to call the superconstructor when extending this class.
      * @param x The x-coordinate of the top-left corner of the object.
      * @param y The y-coordinate of the top-left corner of the object.
      * @param images The images that the object can display.
@@ -59,7 +73,7 @@ public class GameObject {
         //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
     }
     /**
-     * Creates a new GameObject.
+     * Creates a new GameObject. Remember to call the superconstructor when extending this class.
      * @param x The x-coordinate of the top-left corner of the object.
      * @param y The y-coordinate of the top-left corner of the object.
      * @param endx The x-coordinate of the bottom-right corner of the object.
@@ -82,7 +96,7 @@ public class GameObject {
     }
     
     /**
-     * Creates a new GameObject.
+     * Creates a new GameObject. Remember to call the superconstructor when extending this class.
      * @param x The x-coordinate of the top-left corner of the object.
      * @param y The y-coordinate of the top-left corner of the object.
      * @param endx The x-coordinate of the bottom-right corner of the object.
