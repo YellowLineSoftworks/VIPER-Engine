@@ -326,6 +326,14 @@ public class BufferedFrame extends Frame implements BufferedDevice {
     }
     
     /**
+     * Removes all images.
+     */
+    @Override
+    public void clear() {
+        sprites.clear();
+    }
+    
+    /**
      * Centers the frame on the screen.
      */
     public void centerFrame() {

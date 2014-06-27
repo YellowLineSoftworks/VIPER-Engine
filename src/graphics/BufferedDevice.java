@@ -132,6 +132,11 @@ public interface BufferedDevice {
     void removeImage(Image img);
     
     /**
+     * Removes all images.
+     */
+    void clear();
+    
+    /**
      * Enables the device's FPS counter.
      * @param clock The current game clock.
      */

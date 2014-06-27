@@ -343,6 +343,14 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
     }
     
     /**
+     * Removes all images.
+     */
+    @Override
+    public void clear() {
+        sprites.clear();
+    }
+    
+    /**
      * Enables the device's FPS counter.
      * @param clock The current game clock.
      */
