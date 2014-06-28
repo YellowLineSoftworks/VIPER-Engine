@@ -159,7 +159,7 @@ public class Button extends GameObject {
     public void buttonPressed() {
         pressed = true;
         pressedButtons.add(this);
-        changeSprite(1);
+        changeDisplayedSprite(1);
     }
     
     /**
@@ -167,7 +167,7 @@ public class Button extends GameObject {
      */
     public void resetButtonState() {
         pressed = false;
-        changeSprite(0);
+        changeDisplayedSprite(0);
     }
     
     /**
@@ -175,7 +175,7 @@ public class Button extends GameObject {
      */
     public void buttonReleased() {
         pressed = false;
-        changeSprite(0);
+        changeDisplayedSprite(0);
         try{method.invoke(referenceObject, args);} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
             System.err.println("Error invoking method " + method.getName() + " in class " + method.getDeclaringClass().getSimpleName());
             System.err.println(e.getMessage()); 
