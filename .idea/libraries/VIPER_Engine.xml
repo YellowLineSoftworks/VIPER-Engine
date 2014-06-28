@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="VIPER-Engine">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/VIPER-Engine.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

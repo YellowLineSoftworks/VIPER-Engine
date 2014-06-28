@@ -37,6 +37,8 @@ public class GameObject {
     private int idcounter;
     private Point movement;
     private final BufferedDevice device;
+
+
     
     /**
      * Creates a new GameObject. Remember to call the superconstructor when extending this class.
