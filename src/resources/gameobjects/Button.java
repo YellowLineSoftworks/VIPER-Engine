@@ -32,6 +32,19 @@ public class Button extends GameObject {
      * Creates a new Button.
      * @param x The x-coordinate of the top-left corner of the button.
      * @param y The y-coordinate of the top-left corner of the button.
+     * @param method The method to run when the button is pressed.
+     * @param device The BufferedDevice that contains the button.
+     */
+    public Button(int x, int y, Method method, BufferedDevice device) {
+        super(x, y, new Image[0], device);
+        this.method = method;
+        buttons.add(this);
+    }
+    
+    /**
+     * Creates a new Button.
+     * @param x The x-coordinate of the top-left corner of the button.
+     * @param y The y-coordinate of the top-left corner of the button.
      * @param unclicked The image to display when the button is not being clicked.
      * @param clicked The image to display when the button is being clicked.
      * @param method The method to run when the button is pressed.

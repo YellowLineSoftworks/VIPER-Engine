@@ -8,6 +8,8 @@ package resources.listener;
 
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
+import resources.GameObject;
 import resources.ResolutionCalculator;
 import resources.gameobjects.Button;
 
@@ -117,6 +119,22 @@ public abstract class Mouselistener implements MouseListener {
     public void mouseClicked (MouseEvent evt) {
         button = evt.getButton();
         event = 5;
+        int x = evt.getX();
+        int y = evt.getY();
+        if(calc != null) {
+            x = calc.reverseCalcForX(x);
+            y = calc.reverseCalcForY(y);
+        }
+        for(GameObject temp: GameObject.clickableObjects) {
+            if (temp.currentSprite.x1 <= x && temp.currentSprite.x2 >= x) {
+                if (temp.currentSprite.y1 <= y && temp.currentSprite.y2 >= y) {
+                    try{temp.onClick.invoke(temp.onClickReferenceObject, temp.onClickArgs);} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
+                        System.err.println("Error invoking method " + temp.onClick.getName() + " in class " + temp.onClick.getDeclaringClass().getSimpleName());
+                        System.err.println(e.getMessage()); 
+                    }
+                }
+            }
+        }
         MouseClicked(evt);
     }
     

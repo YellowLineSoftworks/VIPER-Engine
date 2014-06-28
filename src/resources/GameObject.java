@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.List;
 import java.awt.Point;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 /**
@@ -34,11 +35,25 @@ public class GameObject {
      * The sprite that is currently being displayed.
      */
     public Sprite currentSprite;
+    /**
+     * A list of the GameObjects that are currently clickable.
+     */
+    public static List<GameObject> clickableObjects = new ArrayList();
+    /**
+     * The method to execute on click, if the object is clickable.
+     */
+    public Method onClick;
+    /**
+     * Arguments for the method that executes on click, if the object is clickable.
+     */
+    public Object[] onClickArgs = new Object[]{};
+    /**
+     * Reference object for the method that executes on click, if the object is clickable.
+     */
+    public Object onClickReferenceObject = this;
     private int idcounter;
     private Point movement;
     private final BufferedDevice device;
-
-
     
     /**
      * Creates a new GameObject. Remember to call the superconstructor when extending this class.
@@ -129,8 +144,10 @@ public class GameObject {
      * @param id The ID of the sprite to change to.
      */
     public void changeDisplayedSprite(int id) {
-        currentSprite = sprites[id];
-        draw();
+        if (sprites.length > id) {
+            currentSprite = sprites[id];
+            draw();
+        }
     }
     
     /**
@@ -251,6 +268,28 @@ public class GameObject {
             g.drawImage(currentSprite.image, x, y, currentSprite.x2 - currentSprite.x1 + x, currentSprite.y2 - currentSprite.y1 + y, 
                     currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2, null);
         }
+    }
+    
+    /**
+     * Adds a method to execute when the object is clicked.
+     * @param onClick The method to execute.
+     */
+    public void addFunctionOnClick(Method onClick) {
+        clickableObjects.add(this);
+        this.onClick = onClick;
+    }
+    
+    /**
+     * Adds a method to execute when the object is clicked.
+     * @param onClick The method to execute.
+     * @param onClickArgs The arguments for the method.
+     * @param onClickReferenceObject The reference object for the method.
+     */
+    public void addFunctionOnClick(Method onClick, String[] onClickArgs, Object onClickReferenceObject) {
+        clickableObjects.add(this);
+        this.onClick = onClick;
+        this.onClickArgs = onClickArgs;
+        this.onClickReferenceObject = onClickReferenceObject;
     }
     
 }
