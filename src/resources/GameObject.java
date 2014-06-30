@@ -26,7 +26,7 @@ public class GameObject {
     /**
      * A list of all the GameObjects in the application.
      */
-    public List<GameObject> objects = new ArrayList();
+    public static List<GameObject> objects = new ArrayList();
     /**
      * An array containing the sprites that the object can display.
      */
@@ -292,12 +292,24 @@ public class GameObject {
         this.onClickReferenceObject = onClickReferenceObject;
     }
     
+    /**
+     * Destroys the GameObject.
+     */
     public void destroy() {
         sprites = null;
         currentSprite = null;
         objects.remove(this);
         if (clickableObjects.contains(this)) {
             clickableObjects.remove(this);
+        }
+    }
+    
+    /**
+     * Destroys all GameObjects.
+     */
+    public static void clear() {
+        for (GameObject g: objects) {
+            g.destroy();
         }
     }
     
