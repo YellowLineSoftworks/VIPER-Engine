@@ -292,4 +292,13 @@ public class GameObject {
         this.onClickReferenceObject = onClickReferenceObject;
     }
     
+    public void destroy() {
+        sprites = null;
+        currentSprite = null;
+        objects.remove(this);
+        if (clickableObjects.contains(this)) {
+            clickableObjects.remove(this);
+        }
+    }
+    
 }

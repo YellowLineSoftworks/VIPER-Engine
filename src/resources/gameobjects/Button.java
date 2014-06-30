@@ -194,4 +194,16 @@ public class Button extends GameObject {
             System.err.println(e.getMessage()); 
         }
     }
+    
+    /**
+     * Removes the button.
+     */
+    @Override
+    public void destroy() {
+        super.destroy();
+        buttons.remove(this);
+        if (pressedButtons.contains(this)) {
+            pressedButtons.remove(this);
+        }
+    }
 }
