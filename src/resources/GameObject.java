@@ -308,8 +308,8 @@ public class GameObject {
      * Destroys all GameObjects.
      */
     public static void clear() {
-        for (int c = 0; c < objects.size(); c++) {
-            objects.get(c).destroy();
+        while(objects.size() > 0) {
+            objects.get(0).destroy();
         }
     }
     

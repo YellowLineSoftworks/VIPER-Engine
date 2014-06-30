@@ -211,8 +211,8 @@ public class Button extends GameObject {
      * Destroys all buttons.
      */
     public static void clear() {
-        for (int c = 0; c < buttons.size(); c++) {
-            buttons.get(c).destroy();
+        while(buttons.size() > 0) {
+            buttons.get(0).destroy();
         }
     }
 }
