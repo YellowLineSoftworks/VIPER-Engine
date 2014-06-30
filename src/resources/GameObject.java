@@ -285,7 +285,7 @@ public class GameObject {
      * @param onClickArgs The arguments for the method.
      * @param onClickReferenceObject The reference object for the method.
      */
-    public void addFunctionOnClick(Method onClick, String[] onClickArgs, Object onClickReferenceObject) {
+    public void addFunctionOnClick(Method onClick, Object[] onClickArgs, Object onClickReferenceObject) {
         clickableObjects.add(this);
         this.onClick = onClick;
         this.onClickArgs = onClickArgs;
