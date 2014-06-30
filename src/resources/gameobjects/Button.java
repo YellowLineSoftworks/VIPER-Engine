@@ -206,4 +206,13 @@ public class Button extends GameObject {
             pressedButtons.remove(this);
         }
     }
+    
+    /**
+     * Destroys all buttons.
+     */
+    public static void clear() {
+        for (Button b: buttons) {
+            b.destroy();
+        }
+    }
 }
