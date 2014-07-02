@@ -131,6 +131,7 @@ public abstract class Mouselistener implements MouseListener {
                     try{temp.onClick.invoke(temp.onClickReferenceObject, temp.onClickArgs);} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
                         System.err.println("Error invoking method " + temp.onClick.getName() + " in class " + temp.onClick.getDeclaringClass().getSimpleName());
                         System.err.println(e.getMessage()); 
+                        e.printStackTrace();
                     }
                 }
             }

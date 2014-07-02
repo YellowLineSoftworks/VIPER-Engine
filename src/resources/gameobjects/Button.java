@@ -191,6 +191,7 @@ public class Button extends GameObject {
         changeDisplayedSprite(0);
         try{method.invoke(referenceObject, args);} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
             System.err.println("Error invoking method " + method.getName() + " in class " + method.getDeclaringClass().getSimpleName());
+            e.printStackTrace();
             System.err.println(e.getMessage()); 
         }
     }

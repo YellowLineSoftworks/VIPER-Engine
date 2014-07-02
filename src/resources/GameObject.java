@@ -89,7 +89,7 @@ public class GameObject {
         //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
         //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
     }
-    /**
+    /**                             
      * Creates a new GameObject. Remember to call the superconstructor when extending this class.
      * @param x The x-coordinate of the top-left corner of the object.
      * @param y The y-coordinate of the top-left corner of the object.
