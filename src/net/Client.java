@@ -1,4 +1,4 @@
-package server;
+package net;
 
 import java.io.InputStream;
 import java.io.PrintWriter;

@@ -125,9 +125,10 @@ public abstract class Mouselistener implements MouseListener {
             x = calc.reverseCalcForX(x);
             y = calc.reverseCalcForY(y);
         }
-        for(GameObject temp: GameObject.clickableObjects) {
-            if (temp.currentSprite.x1 <= x && temp.currentSprite.x2 >= x) {
-                if (temp.currentSprite.y1 <= y && temp.currentSprite.y2 >= y) {
+        for(int c = 0; c < GameObject.clickableObjects.size(); c++) {
+            GameObject temp = GameObject.clickableObjects.get(c);
+            if (temp.location.x <= x && temp.currentSprite.image.getWidth(null) + temp.location.x >= x) {
+                if (temp.location.y <= y && temp.currentSprite.image.getHeight(null) + temp.location.y >= y) {
                     try{temp.onClick.invoke(temp.onClickReferenceObject, temp.onClickArgs);} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
                         System.err.println("Error invoking method " + temp.onClick.getName() + " in class " + temp.onClick.getDeclaringClass().getSimpleName());
                         System.err.println(e.getMessage()); 
