@@ -37,15 +37,14 @@ public class RSA {
      */
     public BigInteger[][] generateKeyPairs(int bits) {
         BigInteger p, q, n, phi, e, d;
-        System.out.println("Generating key pairs...");
         p = genPrime(bits);
         q = genPrime(bits);
         n = p.multiply(q);
         phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
         Random rnd = new SecureRandom();
-        e = BigInteger.probablePrime(bits - 1, rnd);
+        e = genPrime(bits - 1);
         while (!e.gcd(phi).equals(BigInteger.ONE)) {
-            e = BigInteger.probablePrime(bits - 1, rnd);
+            e = genPrime(bits - 1);
         }
         d = e.modInverse(phi);
         publicKey = new BigInteger[]{n, e};

@@ -1,6 +1,8 @@
 package net;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -30,11 +32,12 @@ public class Client {
      */
     public void connect(String hostName, int portNumber) {
         try {
-            Socket echoSocket = new Socket(hostName, portNumber);
-            output = new PrintWriter(echoSocket.getOutputStream(), true);
-            input = echoSocket.getInputStream();
+            Socket sock = new Socket(hostName, portNumber);
+            output = new PrintWriter(sock.getOutputStream(), true);
+            input = sock.getInputStream();
         } catch (Exception e) {
             System.err.println("Failed to connect to server: " + hostName + ":" + portNumber);
+            e.printStackTrace();
         }
     }
     
@@ -53,15 +56,30 @@ public class Client {
      */
     public String receive() {
         try {
-            byte[] buffer = new byte[1024];
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.input));
+            return in.readLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Read error";
+        }
+    }
+    
+    /**
+     * Waits for the server to send data and receives it.
+     * @param bytes The number of bytes to receive.
+     * @return The received data.
+     */
+    public String receive(int bytes) {
+        try {
+            byte[] buffer = new byte[bytes];
             int read;
             String out = "";
-            while((read = input.read(buffer)) != -1) {
-                out = out + new String(buffer, 0, read);
-            }
+            read = input.read(buffer);
+            out = new String(buffer, 0, read);
             return out;
         } catch (Exception e) {
-            return "Read error";
+            e.printStackTrace();
+            return "Read error.";
         }
     }
     

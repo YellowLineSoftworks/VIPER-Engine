@@ -1,6 +1,10 @@
 package crypto;
 
+import java.io.File;
 import static java.lang.Math.random;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.security.Security;
 import javax.crypto.Cipher;
@@ -48,6 +52,28 @@ public class AES {
             SecretKeySpec key = new SecretKeySpec(encryptionKey, "AES");
             cipher.init(Cipher.ENCRYPT_MODE, key,new IvParameterSpec(IV));
             return cipher.doFinal(plainText.getBytes("UTF-8"));
+        } catch (Exception e) {
+            System.err.println(e.getStackTrace());
+            return new byte[0];
+        }
+    }
+    
+    /**Encrypts a file with the given encryption key.
+     * @param file The file to encrypt.
+     * @param encryptionKey The AES encryption key. Can be generated with {@link #genEncryptionKey(int bits) genEncryptionKey()} or provided.
+     * @return The ciphertext as a byte[].
+     */
+    public static byte[] encrypt(File file, byte[] encryptionKey) {
+        try {
+            SecureRandom random = new SecureRandom();
+            byte[] IV = new byte[20];
+            random.nextBytes(IV);
+            Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
+            SecretKeySpec key = new SecretKeySpec(encryptionKey, "AES");
+            cipher.init(Cipher.ENCRYPT_MODE, key,new IvParameterSpec(IV));
+            Path path = Paths.get(file.getPath());
+            byte[] data = Files.readAllBytes(path);
+            return cipher.doFinal(data);
         } catch (Exception e) {
             System.err.println(e.getStackTrace());
             return new byte[0];

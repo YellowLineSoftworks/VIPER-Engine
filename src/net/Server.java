@@ -92,4 +92,16 @@ public class Server implements Runnable{
             } catch (Exception e) {}
         }
     }
+    
+    /**
+     * Closes the connection with the given client.
+     * @param clientIndex The index of the client to close the connection with (from the clients[] array)
+     */
+    public void close(int clientIndex) {
+        try {
+            clients.get(clientIndex).close();
+            clients.remove(clientIndex);
+        } catch (Exception e) {}
+    }
+    
 }
