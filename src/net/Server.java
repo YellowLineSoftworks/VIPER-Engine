@@ -82,7 +82,7 @@ public class Server implements Runnable{
     }
     
     /**
-     * @deprecated Use {@link start()} instead.
+     * @deprecated Use {@link #start() start()} instead.
      */
     public void run() {
         while (running) {

@@ -22,8 +22,8 @@ public abstract class Keylistener implements KeyListener {
   
   /**
    * Override function.
-   * @param e 
-   * @deprecated Use {@link keyPressed()} instead.
+   * @param e The KeyEvent to register.
+   * @deprecated Use {@link #KeyPressed(KeyEvent e) KeyPressed()} instead.
    */
   @Override
   public void keyPressed( KeyEvent e ) {
@@ -34,8 +34,8 @@ public abstract class Keylistener implements KeyListener {
   
   /**
    * Override function.
-   * @param e 
-   * @deprecated Use {@link keyReleased()} instead.
+   * @param e The KeyEvent to register.
+   * @deprecated Use {@link #KeyReleased(KeyEvent e) KeyReleased()} instead.
    */
   @Override
   public void keyReleased( KeyEvent e ) {
@@ -46,8 +46,8 @@ public abstract class Keylistener implements KeyListener {
   
   /**
    * Override function.
-   * @param e 
-   * @deprecated Use {@link keyTyped()} instead.
+   * @param e The KeyEvent to register.
+   * @deprecated Use {@link #KeyTyped(KeyEvent e) KeyTyped()} instead.
    */
   @Override
   public void keyTyped( KeyEvent e ) {

@@ -29,8 +29,8 @@ public abstract class Mouselistener implements MouseListener {
     
     /**
      * Override function.
-     * @param evt 
-     * @deprecated Use {@link MouseExited()} instead.
+     * @param evt The MouseEvent to register.
+     * @deprecated Use {@link #MouseExited(MouseEvent evt) MouseExited()} instead.
      */
     @Override
     public void mouseExited (MouseEvent evt) {
@@ -41,8 +41,8 @@ public abstract class Mouselistener implements MouseListener {
         
     /**
      * Override function.
-     * @param evt 
-     * @deprecated Use {@link MouseEntered()} instead.
+     * @param evt The MouseEvent to register.
+     * @deprecated Use {@link #MouseEntered(MouseEvent evt) MouseEntered()} instead.
      */
     @Override
     public void mouseEntered (MouseEvent evt) {
@@ -53,8 +53,8 @@ public abstract class Mouselistener implements MouseListener {
         
     /**
      * Override function.
-     * @param evt 
-     * @deprecated Use {@link MouseReleased()} instead.
+     * @param evt The MouseEvent to register.
+     * @deprecated Use {@link #MouseReleased(MouseEvent evt) MouseReleased()} instead.
      */
     @Override
     public void mouseReleased (MouseEvent evt) {
@@ -86,8 +86,8 @@ public abstract class Mouselistener implements MouseListener {
         
     /**
      * Override function.
-     * @param evt 
-     * @deprecated Use {@link MousePressed()} instead.
+     * @param evt The MouseEvent to register.
+     * @deprecated Use {@link #MousePressed(MouseEvent evt) MousePressed()} instead.
      */
     @Override
     public void mousePressed (MouseEvent evt) {
@@ -112,8 +112,8 @@ public abstract class Mouselistener implements MouseListener {
         
     /**
      * Override function.
-     * @param evt 
-     * @deprecated Use {@link MouseClicked()} instead.
+     * @param evt The MouseEvent to register.
+     * @deprecated Use {@link #MouseClicked(MouseEvent evt) MouseClicked()} instead.
      */
     @Override
     public void mouseClicked (MouseEvent evt) {
@@ -142,37 +142,38 @@ public abstract class Mouselistener implements MouseListener {
     
     /**
      * Runs when the mouse exits the component.
-     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
+     * @param evt The MouseEvent that occurred to trigger the function call.
      */
     public abstract void MouseExited(MouseEvent evt);
     
     /**
      * Runs when the mouse enters the component.
-     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
+     * @param evt The MouseEvent that occurred to trigger the function call.
      */
     public abstract void MouseEntered(MouseEvent evt);
     
     /**
      * Runs when a mouse button is released.
-     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
+     * @param evt The MouseEvent that occurred to trigger the function call.
      */
     public abstract void MouseReleased(MouseEvent evt);
     
     /**
      * Runs when a mouse button is clicked.
-     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
+     * @param evt The MouseEvent that occurred to trigger the function call.
      */
     public abstract void MouseClicked(MouseEvent evt);
     
     /**
      * Runs when a mouse button is pressed.
-     * @param MouseEvent The MouseEvent that occurred to trigger the function call.
+     * @param evt The MouseEvent that occurred to trigger the function call.
      */
     public abstract void MousePressed(MouseEvent evt);
     
     /**
      * Causes the MouseListener to use a ResolutionCalculator to adjust mouse locations. Note: The x and y coordinates in the child class'
      * handling functions will not be affected by the ResolutionCalculator, and will have to adjust any X and Y coordinates accordingly.
+     * @param calc The ResolutionCalculator to add.
      */
     public void addResolutionCalculator(ResolutionCalculator calc) {
         this.calc = calc;

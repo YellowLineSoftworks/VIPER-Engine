@@ -96,7 +96,7 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
      * Override for the panel's default function. Renders images
      * onto the panel.
      * @param graphics The panel's default Graphics object.
-     * @deprecated Use {@link render()} instead.
+     * @deprecated Use {@link #render() render()} instead.
      */
     @Override
     protected void paintComponent(Graphics graphics) {

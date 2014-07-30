@@ -176,7 +176,7 @@ public class Button extends GameObject {
     }
     
     /**
-     * Resets the button to it's unpressed state without executing the {@link clicked()} function.
+     * Resets the button to it's unpressed state without invoking the method passed into the {@link #Button(int x, int y, Method method, BufferedDevice device) constructor}.
      */
     public void resetButtonState() {
         pressed = false;
