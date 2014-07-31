@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Canvas;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +31,13 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
     public static List<BufferedCanvas> canvases = new ArrayList();
     public ResolutionCalculator calc = null;
     private final List<Sprite> sprites = new ArrayList();
+    private KeyListener keylistener = new DefaultKeylistener();
+    private MouseListener mouselistener = new DefaultMouselistener();
     private BufferStrategy buffer;
     private Graphics graphics;
     private boolean fpscounter = false;
     private Clock clock;
+    private boolean backgroundActive = false;
     
     /**
      * Creates a new BufferedCanvas. Uses the default size and 
@@ -41,8 +46,8 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
     public BufferedCanvas() {
         
         canvases.add(this);
-        this.addMouseListener(new DefaultMouselistener());
-        this.addKeyListener(new DefaultKeylistener());
+        this.addMouseListener(mouselistener);
+        this.addKeyListener(keylistener);
         this.setIgnoreRepaint(true);
         this.setVisible(true);
         
@@ -58,8 +63,8 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         
         this.setSize(width, height);
         canvases.add(this);
-        this.addMouseListener(new DefaultMouselistener());
-        this.addKeyListener(new DefaultKeylistener());
+        this.addMouseListener(mouselistener);
+        this.addKeyListener(keylistener);
         this.setIgnoreRepaint(true);
         this.setVisible(true);
         
@@ -76,8 +81,10 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         
         this.setSize(width, height);
         canvases.add(this);
-        this.addMouseListener(mouselisten);
-        this.addKeyListener(keylisten);
+        mouselistener = mouselisten;
+        keylistener = keylisten;
+        this.addMouseListener(mouselistener);
+        this.addKeyListener(keylistener);
         this.setIgnoreRepaint(true);
         this.setVisible(true);
         
@@ -375,5 +382,39 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
     public void useResolutionCalculator(ResolutionCalculator calc) {
         this.calc = calc;
     }
-
+    
+    /**
+     * Sets the background image.
+     * @param image The image to set as the background.
+     */
+    public void setBackground(Image image) {
+        if (backgroundActive) {
+            sprites.remove(0);
+        }
+        sprites.add(0, new Sprite(image, 0, 0));
+        backgroundActive = true;
+    }
+    
+    /**
+     * Changes the device's mouselistener. If one was not added, replaces the DefaultMouselistener in use with the inputted Mouselistener.
+     * @param mouselisten The Mouselistener to use.
+     */
+    @Override
+    public void changeMouseListener(Mouselistener mouselisten) {
+        removeMouseListener(mouselistener);
+        mouselistener = mouselisten;
+        addMouseListener(mouselisten);
+    }
+    
+    /**
+     * Changes the device's keylistener. If one was not added, replaces the DefaultKeylistener in use with the inputted Keylistener.
+     * @param keylisten The Keylistener to use.
+     */
+    @Override
+    public void changeKeyListener(Keylistener keylisten) {
+        removeKeyListener(keylistener);
+        keylistener = keylisten;
+        addKeyListener(keylisten);
+    }
+    
 }

@@ -33,8 +33,8 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     public static BufferedJFrame frame;
     public ResolutionCalculator calc = null;
     protected List<Sprite> sprites = new ArrayList();
-    private Mouselistener mouselisten;
-    private Keylistener keylisten;
+    private Mouselistener mouselistener = new DefaultMouselistener();
+    private Keylistener keylistener = new DefaultKeylistener();
     private BufferStrategy buffer;
     private Graphics graphics;
     private boolean fpscounter = false;
@@ -43,6 +43,7 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     private Clock clock;
     private int x = 0;
     private int y = 0;
+    private boolean backgroundActive = false;
     
     /**
      * Creates a new BufferedJFrame. Uses default mouse and key listeners.
@@ -57,9 +58,8 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
         this.y = y;
         frame = this;
         frame.setLocation(x, y);
-        frame.addMouseListener(new DefaultMouselistener());
-        frame.addKeyListener(new DefaultKeylistener());
-        frame.setTitle(title);
+        frame.addMouseListener(mouselistener);
+        frame.addKeyListener(keylistener);
         frame.setSize(width, height);
         frame.setVisible(true);
         frame.setIgnoreRepaint(true);
@@ -84,10 +84,10 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
         this.y = y;
         frame = this;
         frame.setLocation(x, y);
-        frame.addMouseListener(mouselisten);
-        this.mouselisten = mouselisten;
-        frame.addKeyListener(keylisten);
-        this.keylisten = keylisten;
+        frame.addMouseListener(this.mouselistener);
+        this.mouselistener = mouselisten;
+        frame.addKeyListener(this.keylistener);
+        this.keylistener = keylisten;
         frame.setTitle(title);
         frame.setSize(width, height);
         frame.setUndecorated(undecorated);
@@ -426,5 +426,40 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     public void useResolutionCalculator(ResolutionCalculator calc) {
         this.calc = calc;
     }
-  
+    
+    /**
+     * Sets the background image.
+     * @param image The image to set as the background.
+     */
+    @Override
+    public void setBackground(Image image) {
+        if (backgroundActive) {
+            sprites.remove(0);
+        }
+        sprites.add(0, new Sprite(image, 0, 0));
+        backgroundActive = true;
+    }
+    
+    /**
+     * Changes the device's mouselistener. If one was not added, replaces the DefaultMouselistener in use with the inputted Mouselistener.
+     * @param mouselisten The Mouselistener to use.
+     */
+    @Override
+    public void changeMouseListener(Mouselistener mouselisten) {
+        removeMouseListener(mouselistener);
+        mouselistener = mouselisten;
+        addMouseListener(mouselisten);
+    }
+    
+    /**
+     * Changes the device's keylistener. If one was not added, replaces the DefaultKeylistener in use with the inputted Keylistener.
+     * @param keylisten The Keylistener to use.
+     */
+    @Override
+    public void changeKeyListener(Keylistener keylisten) {
+        removeKeyListener(keylistener);
+        keylistener = keylisten;
+        addKeyListener(keylisten);
+    }
+    
 }

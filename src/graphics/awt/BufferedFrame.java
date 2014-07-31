@@ -11,6 +11,8 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
@@ -40,9 +42,12 @@ public class BufferedFrame extends Frame implements BufferedDevice {
     private boolean fpscounter = false;
     private boolean switching = false;
     private boolean fullscreen = false;
+    private KeyListener keylistener = new DefaultKeylistener();
+    private MouseListener mouselistener = new DefaultMouselistener();
     private Clock clock;
     private int x = 0;
     private int y = 0;
+    private boolean backgroundActive = false;
     
     /**
      * Creates a new BufferedFrame. Uses default mouse and key listeners.
@@ -57,8 +62,8 @@ public class BufferedFrame extends Frame implements BufferedDevice {
         this.y = y;
         frame = this;
         frame.setLocation(x, y);
-        frame.addMouseListener(new DefaultMouselistener());
-        frame.addKeyListener(new DefaultKeylistener());
+        frame.addMouseListener(mouselistener);
+        frame.addKeyListener(keylistener);
         frame.setTitle(title);
         frame.setSize(width, height);
         frame.setVisible(true);
@@ -81,8 +86,10 @@ public class BufferedFrame extends Frame implements BufferedDevice {
         this.y = y;
         frame = this;
         frame.setLocation(x, y);
-        frame.addMouseListener(mouselisten);
-        frame.addKeyListener(keylisten);
+        mouselistener = mouselisten;
+        keylistener = keylisten;
+        frame.addMouseListener(mouselistener);
+        frame.addKeyListener(keylistener);
         frame.setTitle(title);
         frame.setSize(width, height);
         frame.setVisible(true);
@@ -422,6 +429,41 @@ public class BufferedFrame extends Frame implements BufferedDevice {
      */
     public void useResolutionCalculator(ResolutionCalculator calc) {
         this.calc = calc;
+    }
+    
+    /**
+     * Sets the background image.
+     * @param image The image to set as the background.
+     */
+    @Override
+    public void setBackground(Image image) {
+        if (backgroundActive) {
+            sprites.remove(0);
+        }
+        sprites.add(0, new Sprite(image, 0, 0));
+        backgroundActive = true;
+    }
+    
+    /**
+     * Changes the device's mouselistener. If one was not added, replaces the DefaultMouselistener in use with the inputted Mouselistener.
+     * @param mouselisten The Mouselistener to use.
+     */
+    @Override
+    public void changeMouseListener(Mouselistener mouselisten) {
+        removeMouseListener(mouselistener);
+        mouselistener = mouselisten;
+        addMouseListener(mouselisten);
+    }
+    
+    /**
+     * Changes the device's keylistener. If one was not added, replaces the DefaultKeylistener in use with the inputted Keylistener.
+     * @param keylisten The Keylistener to use.
+     */
+    @Override
+    public void changeKeyListener(Keylistener keylisten) {
+        removeKeyListener(keylistener);
+        keylistener = keylisten;
+        addKeyListener(keylisten);
     }
     
 }

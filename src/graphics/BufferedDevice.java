@@ -3,6 +3,8 @@ package graphics;
 import game.Clock;
 import java.awt.Image;
 import resources.Sprite;
+import resources.listener.Keylistener;
+import resources.listener.Mouselistener;
 
 /**
  * BufferedDevices are GUI components with built-in image drawing
@@ -146,5 +148,23 @@ public interface BufferedDevice {
      * Disables the device's FPS counter.
      */
     void disableFpsCounter();
+    
+    /**
+     * Add a background image.
+     * @param image The image to use as the background.
+     */
+    void setBackground(Image image);
+    
+    /**
+     * Changes the device's keylistener. If one was not added, replaces the DefaultKeylistener in use with the inputted Keylistener.
+     * @param keylisten The Keylistener to use.
+     */
+    void changeKeyListener(Keylistener keylisten);
+    
+    /**
+     * Changes the device's mouselistener. If one was not added, replaces the DefaultMouselistener in use with the inputted Mouselistener.
+     * @param mouselisten The Mouselistener to use.
+     */
+    void changeMouseListener(Mouselistener mouselisten);
 
 }

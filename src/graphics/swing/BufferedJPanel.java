@@ -5,6 +5,8 @@ import graphics.BufferedDevice;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -30,6 +32,9 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     private Graphics graphics;
     private boolean fpscounter = false;
     private Clock clock;
+    private boolean backgroundActive = false;
+    private MouseListener mouselistener = new DefaultMouselistener();
+    private KeyListener keylistener = new DefaultKeylistener();
     
     /**
      * Creates a new BufferedJPanel. Uses default width and height and
@@ -38,8 +43,8 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     public BufferedJPanel() {
         
         canvases.add(this);
-        this.addMouseListener(new DefaultMouselistener());
-        this.addKeyListener(new DefaultKeylistener());
+        this.addMouseListener(mouselistener);
+        this.addKeyListener(keylistener);
         this.setIgnoreRepaint(true);
         this.setVisible(true);
         
@@ -54,8 +59,8 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
         
         this.setSize(width, height);
         canvases.add(this);
-        this.addMouseListener(new DefaultMouselistener());
-        this.addKeyListener(new DefaultKeylistener());
+        this.addMouseListener(mouselistener);
+        this.addKeyListener(keylistener);
         this.setIgnoreRepaint(true);
         this.setVisible(true);
         
@@ -72,8 +77,10 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
         
         this.setSize(width, height);
         canvases.add(this);
-        this.addMouseListener(mouselisten);
-        this.addKeyListener(keylisten);
+        mouselistener = mouselisten;
+        keylistener = keylisten;
+        this.addMouseListener(mouselistener);
+        this.addKeyListener(keylistener);
         this.setVisible(true);
         
     }
@@ -86,8 +93,10 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     public BufferedJPanel(Mouselistener mouselisten, Keylistener keylisten) {
         
         canvases.add(this);
-        this.addMouseListener(mouselisten);
-        this.addKeyListener(keylisten);
+        mouselistener = mouselisten;
+        keylistener = keylisten;
+        this.addMouseListener(mouselistener);
+        this.addKeyListener(keylistener);
         this.setVisible(true);
         
     }
@@ -388,6 +397,41 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
      */
     public void useResolutionCalculator(ResolutionCalculator calc) {
         this.calc = calc;
+    }
+    
+    /**
+     * Sets the background image.
+     * @param image The image to set as the background.
+     */
+    @Override
+    public void setBackground(Image image) {
+        if (backgroundActive) {
+            sprites.remove(0);
+        }
+        sprites.add(0, new Sprite(image, 0, 0));
+        backgroundActive = true;
+    }
+    
+    /**
+     * Changes the device's mouselistener. If one was not added, replaces the DefaultMouselistener in use with the inputted Mouselistener.
+     * @param mouselisten The Mouselistener to use.
+     */
+    @Override
+    public void changeMouseListener(Mouselistener mouselisten) {
+        removeMouseListener(mouselistener);
+        mouselistener = mouselisten;
+        addMouseListener(mouselisten);
+    }
+    
+    /**
+     * Changes the device's keylistener. If one was not added, replaces the DefaultKeylistener in use with the inputted Keylistener.
+     * @param keylisten The Keylistener to use.
+     */
+    @Override
+    public void changeKeyListener(Keylistener keylisten) {
+        removeKeyListener(keylistener);
+        keylistener = keylisten;
+        addKeyListener(keylisten);
     }
 
 }
