@@ -54,6 +54,9 @@ public class GameObject {
     private int idcounter;
     private Point movement;
     private final BufferedDevice device;
+    private boolean drawn = false;
+    private Graphics g = null;
+    private static int idCounter = 0;
     
     /**
      * Creates a new GameObject. Remember to call the superconstructor when extending this class.
@@ -65,6 +68,8 @@ public class GameObject {
         this.sprites = new Sprite[0];
         currentSprite = null;
         objects.add(this);
+        id = idCounter;
+        idCounter++;
         //Currently does not automatically draw the image.
         //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
         //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
@@ -85,6 +90,8 @@ public class GameObject {
         }
         currentSprite = sprites[0];
         objects.add(this);
+        id = idCounter;
+        idCounter++;
         //Currently does not automatically draw the image.
         //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
         //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
@@ -107,6 +114,8 @@ public class GameObject {
         }
         currentSprite = sprites[0];
         objects.add(this);
+        id = idCounter;
+        idCounter++;
         //Currently does not automatically draw the image.
         //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
         //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
@@ -134,6 +143,8 @@ public class GameObject {
         }
         currentSprite = sprites[0];
         objects.add(this);
+        id = idCounter;
+        idCounter++;
         //Currently does not automatically draw the image.
         //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
         //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
@@ -145,6 +156,7 @@ public class GameObject {
      */
     public void changeDisplayedSprite(int id) {
         if (sprites.length > id) {
+            device.removeImage(currentSprite.id);
             currentSprite = sprites[id];
             draw();
         }
@@ -155,11 +167,13 @@ public class GameObject {
      * @param images An array of the images to change to.
      */
     public void changeSprites(Image[] images) {
-        Sprite[] TempSpriteArray = new Sprite[images.length];
+        Sprite[] newSprites = new Sprite[images.length];
         for (int c = 0; c < images.length; c++) {
-            TempSpriteArray[c] = new Sprite(images[c], sprites[0].x1, sprites[0].y1, sprites[0].x1 + images[c].getWidth(null), 
+            newSprites[c] = new Sprite(images[c], sprites[0].x1, sprites[0].y1, sprites[0].x1 + images[c].getWidth(null), 
                     sprites[0].y1 + images[c].getHeight(null), 0, 0, images[c].getWidth(null), images[c].getWidth(null));
         }
+        sprites = newSprites;
+        currentSprite = sprites[0];
     }
     
     /**
@@ -200,6 +214,7 @@ public class GameObject {
      * @param y The y-coordinate of the bottom-right corner of the destination.
      */
     public void move(int x, int y) {
+        location = new Point(x, y);
         for(Sprite s: sprites) {
             s.move(x, y);
         }
@@ -213,6 +228,7 @@ public class GameObject {
      * @param endy The y-coordinate of the bottom-right corner of the destination.
      */
     public void move(int x, int y, int endx, int endy) {
+        location = new Point(x, y);
         for(Sprite s: sprites) {
             s.move(x, y, endx, endy);
         }
@@ -230,6 +246,7 @@ public class GameObject {
      * @param srcy2 The y-coordinate of the bottom-right corner of the source.
      */
     public void move(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
+        location = new Point(x, y);
         for(Sprite s: sprites) {
             s.move(x, y, endx, endy, srcx1, srcy1, srcx2, srcy2);
         }       
@@ -243,6 +260,7 @@ public class GameObject {
             device.removeImage(currentSprite.id);
             currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
                     currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
+            drawn = true;
         }
     }
     
@@ -254,6 +272,8 @@ public class GameObject {
         if (currentSprite.image != null) {
             g.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
                     currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2, null);
+            drawn = true;
+            this.g = g;
         }
     }
     
@@ -267,6 +287,8 @@ public class GameObject {
         if (currentSprite.image != null) {
             g.drawImage(currentSprite.image, x, y, currentSprite.x2 - currentSprite.x1 + x, currentSprite.y2 - currentSprite.y1 + y, 
                     currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2, null);
+            drawn = true;
+            this.g = g;
         }
     }
     
@@ -296,6 +318,9 @@ public class GameObject {
      * Destroys the GameObject.
      */
     public void destroy() {
+        if(drawn && (g == null || currentSprite != null)) {
+            device.removeImage(currentSprite.id);
+        }
         sprites = null;
         currentSprite = null;
         objects.remove(this);

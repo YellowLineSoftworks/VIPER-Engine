@@ -73,6 +73,7 @@ public abstract class Mouselistener implements MouseListener {
                 if (temp.currentSprite.y1 <= y && temp.currentSprite.y2 >= y) {
                     temp.buttonReleased();
                     found = true;
+                    break;
                 }
             }
         }
@@ -104,6 +105,7 @@ public abstract class Mouselistener implements MouseListener {
             if (temp.currentSprite.x1 <= x && temp.currentSprite.x2 >= x) {
                 if (temp.currentSprite.y1 <= y && temp.currentSprite.y2 >= y) {
                     temp.buttonPressed();
+                    break;
                 }
             }
         }
@@ -129,7 +131,10 @@ public abstract class Mouselistener implements MouseListener {
             GameObject temp = GameObject.clickableObjects.get(c);
             if (temp.location.x <= x && temp.currentSprite.image.getWidth(null) + temp.location.x >= x) {
                 if (temp.location.y <= y && temp.currentSprite.image.getHeight(null) + temp.location.y >= y) {
-                    try{temp.onClick.invoke(temp.onClickReferenceObject, temp.onClickArgs);} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
+                    try{
+                        temp.onClick.invoke(temp.onClickReferenceObject, temp.onClickArgs);
+                        break;
+                    } catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e){
                         System.err.println("Error invoking method " + temp.onClick.getName() + " in class " + temp.onClick.getDeclaringClass().getSimpleName());
                         System.err.println(e.getMessage()); 
                         e.printStackTrace();
