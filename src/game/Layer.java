@@ -1,14 +1,18 @@
 package game;
 
+import graphics.BufferedDevice;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import resources.GameObject;
+import resources.Sprite;
 
 /**
  * A Layer is a collection of GameObjects that holds a specific position in the draw order. Similar to layer systems in image editors.
  * They are drawn (or not drawn) based on whether or not the GameObject is set to draw. If an object is added to a Layer, it will stop
- * drawing on the normal interface. Layer visibility can be toggled, but is enabled by default.
+ * drawing on the normal interface. Layer visibility can be toggled, but is enabled by default. The Layer contains a single array which
+ * houses all of the Sprites and GameObjects, and discriminates between the two by means of a second array of integers representing
+ * the indexes that are Sprites.
  * @author Jack
  * @version 1.4 Alpha
  */
@@ -24,13 +28,18 @@ public class Layer {
      */
     public static List<Layer> layers = new ArrayList();
     private List<GameObject> objects = new ArrayList();
+    private List<Sprite> sprites = new ArrayList();
     private static int idCounter = 0;
     private boolean visible = true;
+    private BufferedDevice device;
+    private int[] spriteIndexes = new int[0];
     
     /**
      * Creates a new empty layer.
+     * @param device The BufferedDevice to display the layer on.
      */
-    public Layer() {
+    public Layer(BufferedDevice device) {
+        this.device = device;
         id = idCounter;
         idCounter++;
         layers.add(this);
@@ -38,9 +47,11 @@ public class Layer {
     
     /**
      * Creates a new layer and initializes it with the given objects.
+     * @param device The BufferedDevice to display the layer on.
      * @param objects The objects to add to the layer.
      */
-    public Layer(GameObject[] objects) {
+    public Layer(GameObject[] objects, BufferedDevice device) {
+        this.device = device;
         this.objects.addAll(Arrays.asList(objects));
         id = idCounter;
         idCounter++;
@@ -60,31 +71,191 @@ public class Layer {
     /**
      * Add an object to the layer at the given index.
      * @param object The object to add.
+     * @param index The index to add it to in the layer.
      * @return The index of the object in the layer.
      */
     public int add(GameObject object, int index) {
         objects.add(index, object);
+        for (int c = 0; c < spriteIndexes.length; c++) {
+            if(spriteIndexes[c] >= index) {
+                spriteIndexes[c]++;
+            }
+        }
         return index;
     }
     
     /**
-     * Removes the object at the given ID from the layer.
-     * @param id The ID of the object to remove.
+     * Add a Sprite to the layer.
+     * @param sprite The sprite to add.
+     * @return The index of the object in the layer.
      */
-    public void remove(int id) {
-        for (int i = 0; i < objects.size(); i++) {
-            objects.remove(i);
+    public int add(Sprite sprite) {
+        objects.add(sprite.toGameObject(device));
+        int[] temp = new int[spriteIndexes.length + 1];
+        System.arraycopy(spriteIndexes, 0, temp, 0, spriteIndexes.length);
+        temp[spriteIndexes.length] = objects.size() - 1;
+        spriteIndexes = temp;
+        return objects.size() - 1;
+    }
+    
+    /**
+     * Add a Sprite to the layer at the given index.
+     * @param sprite The sprite to add.
+     * @param index The index to add it to in the layer.
+     * @return The index of the object in the layer.
+     */
+    public int add(Sprite sprite, int index) {
+        objects.add(index, sprite.toGameObject(device));
+        int[] temp = new int[spriteIndexes.length + 1];
+        boolean added = false;
+        int tempCounter = 0;
+        int indexToInsertValue = 0;
+        for (int a : spriteIndexes) {
+            if (a < index) {
+                indexToInsertValue++;
+            }
+        }
+        //Insert the index into the spriteIndexes array at the appropriate point - ordered by position in the array, so by index size.
+        for (int c = 0; c < spriteIndexes.length; c++) {
+            if (!(tempCounter == indexToInsertValue)){
+                temp[tempCounter] = spriteIndexes[c];
+            } else {
+                temp[tempCounter] = index;
+                tempCounter++;
+                temp[tempCounter] = spriteIndexes[c];
+            }
+            tempCounter++;
+        }
+        if (indexToInsertValue == spriteIndexes.length) {
+            temp[spriteIndexes.length] = index;
+        }
+        //Increment all indexes after the inserted index by one, because something has just been added
+        for (int c = 0; c < temp.length; c++) {
+            if (c > indexToInsertValue) {
+                temp[c]++;
+            }
+        }
+        spriteIndexes = temp;
+        return index;
+    }
+    
+    /**
+     * Removes the GameObject with the given ID from the layer.
+     * @param id The ID of the object to remove (GameObject.id).
+     */
+    public void removeObject(int id) {
+        boolean isSprite = false;
+        for(int y: spriteIndexes) {
+            if (y == id) {
+                isSprite = true;
+            }
+        }
+        if (!isSprite) {
+            for (int i = 0; i < objects.size(); i++) {
+                if (objects.get(i).id == id) {
+                    for (int c = 0; c < spriteIndexes.length; c++) {
+                        if(spriteIndexes[c] > i) {
+                            spriteIndexes[c]--;
+                        }
+                    }
+                    objects.remove(i);
+                }
+            }
+        } else {
+            System.err.println("Error in Layer.removeObject(): Given ID is a Sprite.");
         }
     }
     
     /**
-     * Removes the given object from the layer.
-     * @param object The object to remove.
+     * Removes the given GameObject from the layer.
+     * @param object The GameObject to remove.
      */
-    public void remove(GameObject object) {
+    public void removeObject(GameObject object) {
         for (int i = 0; i < objects.size(); i++) {
             if (objects.get(i).equals(object)) {
-                objects.remove(i);
+                boolean isSprite = false;
+                for(int y: spriteIndexes) {
+                    if (y == i) {
+                        isSprite = true;
+                    }
+                }
+                if (!isSprite) {
+                    for (int c = 0; c < spriteIndexes.length; c++) {
+                        if(spriteIndexes[c] > i) {
+                            spriteIndexes[c]--;
+                        }
+                    }
+                    objects.remove(i);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Removes the Sprite with the given ID from the layer.
+     * @param id The ID of the object to remove (GameObject.id).
+     */
+    public void removeSprite(int id) {
+        boolean isSprite = false;
+        for(int y: spriteIndexes) {
+            if (y == id) {
+                isSprite = true;
+            }
+        }
+        if (isSprite) {
+            for (int i = 0; i < objects.size(); i++) {
+                if (objects.get(i).id == id) {
+                    for (int c = 0; c < spriteIndexes.length; c++) {
+                        if(spriteIndexes[c] == i) {
+                            int[] temp = new int[spriteIndexes.length - 1];
+                            int tempCounter = 0;
+                            for (int z = 0; z < spriteIndexes.length; z++) {
+                                if (spriteIndexes[z] != i) {
+                                    temp[tempCounter] = spriteIndexes[z];
+                                    tempCounter++;
+                                }
+                            }
+                            spriteIndexes = temp;
+                        }
+                    }
+                    objects.remove(i);
+                }
+            }
+        } else {
+            System.err.println("Error in Layer.removeSprite(): Given ID is a GameObject.");
+        }
+    }
+    
+    /**
+     * Removes the given Sprite from the layer.
+     * @param sprite The Sprite to remove.
+     */
+    public void removeSprite(Sprite sprite) {
+        for (int i = 0; i < objects.size(); i++) {
+            if (objects.get(i).currentSprite.equals(sprite)) {
+                boolean isSprite = false;
+                for(int y: spriteIndexes) {
+                    if (y == i) {
+                        isSprite = true;
+                    }
+                }
+                if (isSprite) {
+                    int[] temp = new int[spriteIndexes.length - 1];
+                    int tempCounter = 0;
+                    for (int z = 0; z < spriteIndexes.length; z++) {
+                        if (spriteIndexes[z] != i) {
+                            temp[tempCounter] = spriteIndexes[z];
+                            tempCounter++;
+                        }
+                    }
+                    spriteIndexes = temp;
+                    for (int c = 0; c < spriteIndexes.length; c++) {
+                        if(spriteIndexes[c] > i) {
+                            spriteIndexes[c]--;
+                        }
+                    }
+                    objects.remove(i);
+                }
             }
         }
     }
@@ -94,7 +265,101 @@ public class Layer {
      * @return A GameObject[] containing all of the GameObjects in the layer.
      */
     public GameObject[] getObjects() {
-        return (GameObject[])objects.toArray();
+        List<GameObject> actualObjects = new ArrayList();
+        for (int c = 0; c < objects.size(); c++)  {
+            boolean add = true;
+            for(int index: spriteIndexes){
+                if (c == index) {
+                    add = false;
+                }
+            }
+            if (add) {
+                actualObjects.add(objects.get(c));
+            }
+        }
+        GameObject[] ret = new GameObject[actualObjects.size()];
+        for(int c = 0; c < actualObjects.size(); c++) {
+            ret[c] = actualObjects.get(c);
+        }
+        return ret;
+    }
+    
+    /**
+     * Get an array of all the Sprites in the layer.
+     * @return A Sprite[] containing all of the Sprites in the layer.
+     */
+    public Sprite[] getSprites() {
+        List<Sprite> spritesInList = new ArrayList();
+        for (int c = 0; c < objects.size(); c++)  {
+            boolean add = false;
+            for(int index: spriteIndexes){
+                if (c == index) {
+                    add = true;
+                }
+            }
+            if (add) {
+                spritesInList.add(objects.get(c).currentSprite);
+            }
+        }
+        Sprite[] ret = new Sprite[spritesInList.size()];
+        for(int c = 0; c < spritesInList.size(); c++) {
+            ret[c] = spritesInList.get(c);
+        }
+        return ret;
+    }
+    
+    /**
+     * Gets the GameObject with the given ID.
+     * @param id The ID of the GameObject to retrieve (GameObject.id).
+     * @return The GameObject with the given ID.
+     */
+    public GameObject getObject(int id) {
+        List<GameObject> actualObjects = new ArrayList();
+        for (int c = 0; c < objects.size(); c++)  {
+            boolean add = true;
+            for(int index: spriteIndexes){
+                if (c == index) {
+                    add = false;
+                }
+            }
+            if (add) {
+                actualObjects.add(objects.get(c));
+            }
+        }
+        for (GameObject g: actualObjects) {
+            if (g.id == id) {
+                return g;
+            }
+        }
+        System.err.println("Error in Layer.getObject(): GameObject not found.");
+        return null;
+    }
+    
+    /**
+     * Gets the Sprite with the given ID.
+     * @param id The ID of the Sprite to retrieve (Sprite.id).
+     * @return The Sprite with the given ID.
+     */
+    public Sprite getSprite(int id) {
+        List<Sprite> sprites = new ArrayList();
+        for (int c = 0; c < objects.size(); c++)  {
+            boolean add = false;
+            for(int index: spriteIndexes){
+                if (c == index) {
+                    add = true;
+                }
+            }
+            if (add) {
+                sprites.add(objects.get(c).currentSprite);
+            }
+        }
+        for (Sprite s: sprites) {
+            if (s.id == id) {
+                return s;
+            }
+        }
+        System.err.println("Error in Layer.getSprite(): Sprite not found.");
+        return null;
     }
     
     /**

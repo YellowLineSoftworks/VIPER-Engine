@@ -74,13 +74,29 @@ public class GameObject {
         //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
         //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
     }
+    
+    /**
+     * Creates a new GameObject. Remember to call the superconstructor when extending this class.
+     * @param sprite The image to use as the source for this object.
+     * @param device The BufferedDevice which contains the object.
+     */
+    public GameObject(Sprite sprite, BufferedDevice device) {
+        this.device = device;
+        this.location = new Point(sprite.x1, sprite.y1);
+        this.sprites = new Sprite[]{sprite};
+        currentSprite = sprites[0];
+        objects.add(this);
+        id = idCounter;
+        idCounter++;
+    }
+    
     /**
      * Creates a new GameObject. Remember to call the superconstructor when extending this class.
      * @param x The x-coordinate of the top-left corner of the object.
      * @param y The y-coordinate of the top-left corner of the object.
      * @param images The images that the object can display.
      * @param device The BufferedDevice which contains the object.
-     */
+     */    
     public GameObject(int x, int y, Image[] images, BufferedDevice device) {
         this.device = device;
         this.location = new Point(x,y);
@@ -96,6 +112,27 @@ public class GameObject {
         //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
         //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
     }
+    
+    /**
+     * Creates a new GameObject. Remember to call the superconstructor when extending this class.
+     * @param x The x-coordinate of the top-left corner of the object.
+     * @param y The y-coordinate of the top-left corner of the object.
+     * @param images The images that the object can display.
+     * @param device The BufferedDevice which contains the object.
+     */    
+    public GameObject(int x, int y, Sprite[] images, BufferedDevice device) {
+        this.device = device;
+        this.location = new Point(x,y);
+        this.sprites = images;
+        currentSprite = sprites[0];
+        objects.add(this);
+        id = idCounter;
+        idCounter++;
+        //Currently does not automatically draw the image.
+        //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
+        //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
+    }
+    
     /**                             
      * Creates a new GameObject. Remember to call the superconstructor when extending this class.
      * @param x The x-coordinate of the top-left corner of the object.
@@ -104,7 +141,7 @@ public class GameObject {
      * @param endy The y-coordinate of the bottom-right corner of the object.
      * @param images The images that the object can display.
      * @param device The BufferedDevice which contains the object.
-     */
+     */    
     public GameObject(int x, int y, int endx, int endy, Image[] images, BufferedDevice device) {
         this.device = device;
         this.location = new Point(x,y);
@@ -112,6 +149,28 @@ public class GameObject {
         for (int c = 0; c < images.length; c++) {
             sprites[c] = new Sprite(images[c], x, y, endx, endy);
         }
+        currentSprite = sprites[0];
+        objects.add(this);
+        id = idCounter;
+        idCounter++;
+        //Currently does not automatically draw the image.
+        //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
+        //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
+    }
+    
+    /**                             
+     * Creates a new GameObject. Remember to call the superconstructor when extending this class.
+     * @param x The x-coordinate of the top-left corner of the object.
+     * @param y The y-coordinate of the top-left corner of the object.
+     * @param endx The x-coordinate of the bottom-right corner of the object.
+     * @param endy The y-coordinate of the bottom-right corner of the object.
+     * @param images The images that the object can display.
+     * @param device The BufferedDevice which contains the object.
+     */    
+    public GameObject(int x, int y, int endx, int endy, Sprite[] images, BufferedDevice device) {
+        this.device = device;
+        this.location = new Point(x,y);
+        this.sprites = images;
         currentSprite = sprites[0];
         objects.add(this);
         id = idCounter;
@@ -141,6 +200,32 @@ public class GameObject {
         for (int c = 0; c < images.length; c++) {
             sprites[c] = new Sprite(images[c], x, y, endx, endy, srcx1, srcy1, srcx2, srcy2);
         }
+        currentSprite = sprites[0];
+        objects.add(this);
+        id = idCounter;
+        idCounter++;
+        //Currently does not automatically draw the image.
+        //currentSprite.id = device.drawImage(currentSprite.image, currentSprite.x1, currentSprite.y1, currentSprite.x2, currentSprite.y2, 
+        //        currentSprite.sx1, currentSprite.sy1, currentSprite.sx2, currentSprite.sy2).id;
+    }
+    
+    /**
+     * Creates a new GameObject. Remember to call the superconstructor when extending this class.
+     * @param x The x-coordinate of the top-left corner of the object.
+     * @param y The y-coordinate of the top-left corner of the object.
+     * @param endx The x-coordinate of the bottom-right corner of the object.
+     * @param endy The y-coordinate of the bottom-right corner of the object.
+     * @param srcx1 The x-coordinate of the top-left corner of the source image.
+     * @param srcy1 The y-coordinate of the top-left corner of the source image.
+     * @param srcx2 The x-coordinate of the bottom-right corner of the source image.
+     * @param srcy2 The y-coordinate of the bottom-right corner of the source image.
+     * @param images The images that the object can display.
+     * @param device The BufferedDevice which contains the object.
+     */
+    public GameObject(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2, Sprite[] images, BufferedDevice device) {
+        this.device = device;
+        this.location = new Point(x,y);
+        this.sprites = images;
         currentSprite = sprites[0];
         objects.add(this);
         id = idCounter;
@@ -336,6 +421,14 @@ public class GameObject {
         while(objects.size() > 0) {
             objects.get(0).destroy();
         }
+    }
+    
+    /**
+     * Gets the BufferedDevice the object is displaying on.
+     * @return The BufferedDevice the object is displaying on.
+     */
+    public BufferedDevice getDevice() {
+        return device;
     }
     
 }

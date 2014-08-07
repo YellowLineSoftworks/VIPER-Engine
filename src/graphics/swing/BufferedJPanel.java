@@ -1,6 +1,8 @@
 package graphics.swing;
 
 import game.Clock;
+import game.Layer;
+import game.Room;
 import graphics.BufferedDevice;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+import resources.GameObject;
 import resources.ResolutionCalculator;
 import resources.Sprite;
 import resources.listener.DefaultKeylistener;
@@ -29,6 +32,7 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     public static List<BufferedJPanel> canvases = new ArrayList();
     public ResolutionCalculator calc = null;
     private final List<Sprite> sprites = new ArrayList();
+    private Room currentRoom = new Room(this);
     private Graphics graphics;
     private boolean fpscounter = false;
     private Clock clock;
@@ -370,6 +374,32 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     @Override
     public void clear() {
         sprites.clear();
+    }
+    
+    /**
+     * Gets the room that the BufferedDevice is displaying.
+     * @return The room that the BufferedDevice is displaying.
+     */
+    public Room getRoom() {
+        return currentRoom;
+    }
+    
+    /**
+     * Sets the Room that the BufferedDevice is displaying.
+     * @param room The room to change to.
+     */
+    public void setRoom(Room room) {
+        currentRoom = room;
+        clear();
+        for (Layer l: room.getLayers()) {
+            if (l.isVisible()) {
+                for (GameObject obj: l.getObjects()) {
+                    if (obj.getDevice() == this) {
+                        obj.draw();
+                    }
+                }   
+            }
+        }        
     }
     
     /**

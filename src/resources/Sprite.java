@@ -1,5 +1,6 @@
 package resources;
 
+import graphics.BufferedDevice;
 import java.awt.Image;
 
 /**
@@ -171,6 +172,15 @@ public class Sprite {
         sy1 = srcy1;
         sx2 = srcx2;
         sy2 = srcy2;        
+    }
+    
+    /**
+     * Converts the Sprite to a GameObject.
+     * @param device The BufferedDevice to bind the GameObject to.
+     * @return The converted GameObject.
+     */
+    public GameObject toGameObject(BufferedDevice device) {
+        return new GameObject(this, device);
     }
     
 }
