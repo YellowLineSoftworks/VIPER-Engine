@@ -66,8 +66,18 @@ public class Layer {
      */
     public int add(GameObject object) {
         objects.add(object);
-        if (displayed)
-            object.draw();
+        if (displayed && rooms.contains(Room.displayedRoom)) {
+            Layer[] layers = Room.displayedRoom.getLayers();
+            int counter = 0;
+            for (Layer l: layers) {
+                if (l == this) {
+                    break;
+                } else {
+                    counter+=l.getAllItems().length;
+                }
+            }
+            device.drawImage(object.currentSprite, counter);
+        }
         return objects.size() - 1;
     }
     
@@ -84,8 +94,18 @@ public class Layer {
                 spriteIndexes[c]++;
             }
         }
-        if (displayed)
-            object.draw();
+        if (displayed && rooms.contains(Room.displayedRoom)) {
+            Layer[] layers = Room.displayedRoom.getLayers();
+            int counter = 0;
+            for (Layer l: layers) {
+                if (l == this) {
+                    break;
+                } else {
+                    counter+=l.getAllItems().length;
+                }
+            }
+            device.drawImage(object.currentSprite, counter);
+        }
         return index;
     }
     
@@ -100,8 +120,18 @@ public class Layer {
         System.arraycopy(spriteIndexes, 0, temp, 0, spriteIndexes.length);
         temp[spriteIndexes.length] = objects.size() - 1;
         spriteIndexes = temp;
-        if (displayed)
-            device.drawImage(sprite);
+        if (displayed && rooms.contains(Room.displayedRoom)) {
+            Layer[] layers = Room.displayedRoom.getLayers();
+            int counter = 0;
+            for (Layer l: layers) {
+                if (l == this) {
+                    break;
+                } else {
+                    counter+=l.getAllItems().length;
+                }
+            }
+            device.drawImage(sprite, counter);
+        }
         return objects.size() - 1;
     }
     
@@ -143,8 +173,18 @@ public class Layer {
             }
         }
         spriteIndexes = temp;
-        if (displayed)
-            device.drawImage(sprite);
+        if (displayed && rooms.contains(Room.displayedRoom)) {
+            Layer[] layers = Room.displayedRoom.getLayers();
+            int counter = 0;
+            for (Layer l: layers) {
+                if (l == this) {
+                    break;
+                } else {
+                    counter+=l.getAllItems().length;
+                }
+            }
+            device.drawImage(sprite, counter);
+        }
         return index;
     }
     
