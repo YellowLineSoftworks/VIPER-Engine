@@ -28,11 +28,12 @@ public class Layer {
      */
     public static List<Layer> layers = new ArrayList();
     private List<GameObject> objects = new ArrayList();
-    private List<Sprite> sprites = new ArrayList();
     private static int idCounter = 0;
     private boolean visible = true;
     private BufferedDevice device;
     private int[] spriteIndexes = new int[0];
+    protected boolean displayed = false;
+    protected List<Room> rooms = new ArrayList();
     
     /**
      * Creates a new empty layer.
@@ -65,6 +66,8 @@ public class Layer {
      */
     public int add(GameObject object) {
         objects.add(object);
+        if (displayed)
+            object.draw();
         return objects.size() - 1;
     }
     
@@ -81,6 +84,8 @@ public class Layer {
                 spriteIndexes[c]++;
             }
         }
+        if (displayed)
+            object.draw();
         return index;
     }
     
@@ -95,6 +100,8 @@ public class Layer {
         System.arraycopy(spriteIndexes, 0, temp, 0, spriteIndexes.length);
         temp[spriteIndexes.length] = objects.size() - 1;
         spriteIndexes = temp;
+        if (displayed)
+            device.drawImage(sprite);
         return objects.size() - 1;
     }
     
@@ -136,6 +143,8 @@ public class Layer {
             }
         }
         spriteIndexes = temp;
+        if (displayed)
+            device.drawImage(sprite);
         return index;
     }
     
@@ -158,6 +167,7 @@ public class Layer {
                             spriteIndexes[c]--;
                         }
                     }
+                    device.removeImage(objects.get(i).currentSprite.id);
                     objects.remove(i);
                 }
             }
@@ -185,6 +195,7 @@ public class Layer {
                             spriteIndexes[c]--;
                         }
                     }
+                    device.removeImage(objects.get(i).currentSprite.id);
                     objects.remove(i);
                 }
             }
@@ -218,6 +229,7 @@ public class Layer {
                             spriteIndexes = temp;
                         }
                     }
+                    device.removeImage(objects.get(i).currentSprite.id);
                     objects.remove(i);
                 }
             }
@@ -254,6 +266,7 @@ public class Layer {
                             spriteIndexes[c]--;
                         }
                     }
+                    device.removeImage(objects.get(i).currentSprite.id);
                     objects.remove(i);
                 }
             }
@@ -336,6 +349,23 @@ public class Layer {
     }
     
     /**
+     * Get all GameObjects and Sprites, with the Sprites translated into GameObjects.
+     * @return All of the added GameObjects and Sprites, with the Sprites translated into GameObjects.
+     */
+    public GameObject[] getAllItems() {
+        return (GameObject[])objects.toArray();
+    }
+    
+    /**
+     * Get an array containing the indexes in the array returned by {@link #getAllItems() getAllItems()} 
+     * that reference sprites translated into GameObjects.
+     * @return An array of integers representing the sprite indexes.
+     */
+    public int[] getSpriteIndexes() {
+        return spriteIndexes;
+    }
+    
+    /**
      * Gets the Sprite with the given ID.
      * @param id The ID of the Sprite to retrieve (Sprite.id).
      * @return The Sprite with the given ID.
@@ -375,6 +405,13 @@ public class Layer {
      * @param visible Whether or not the layer should be visible.
      */
     public void setVisible(boolean visible) {
+        if (visible) {
+            display();
+        } else {
+            for (GameObject obj: objects) {
+                device.removeImage(obj.currentSprite.id);
+            }
+        }
         this.visible = visible;
     }
     
@@ -384,6 +421,28 @@ public class Layer {
      */
     public boolean isVisible() {
         return visible;
+    }
+    
+    /**
+     * Displays the layer.
+     */
+    public void display() {
+        if (isVisible()) {
+            for (GameObject object : objects) {
+                object.draw();
+            }
+        }
+    }
+    
+    /**
+     * Clears the layer of all GameObjects and Sprites.
+     */
+    public void clear() {
+        for (GameObject obj: objects) {
+            device.removeImage(obj.currentSprite.id);
+        }
+        objects = new ArrayList();
+        spriteIndexes = new int[0];
     }
     
 }

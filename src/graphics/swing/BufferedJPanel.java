@@ -141,6 +141,27 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     
     /**
      * Draws an image.
+     * @param sprite The sprite you want drawn.
+     */
+    @Override
+    public void drawImage(Sprite sprite){
+    
+        sprites.add(sprite);
+    
+    }
+    
+    /**
+     * Draws an image at the given index in the device's sprite[].
+     * @param sprite The sprite you want drawn.
+     * @param index The index to draw the sprite at.
+     */
+    @Override
+    public void drawImage(Sprite sprite, int index){
+        sprites.add(index, sprite);
+    }
+    
+    /**
+     * Draws an image.
      * @param image The image you want drawn.
      * @param x The x-value of the image's upper-left corner on the destination frame.
      * @param y The y-value of the image's upper-left corner on the destination frame.
@@ -151,8 +172,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     public Sprite drawImage(Image image, int x, int y){
     
         sprites.add(new Sprite(image, x, y));
-        x += 0;
-        y += 10;
         return sprites.get(sprites.size() - 1);
     
     }
@@ -170,8 +189,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     @Override
     public Sprite drawImage(Image image, int x, int y, int endx, int endy) {
         sprites.add(new Sprite(image, x, y, endx, endy));
-        x += 0;
-        y += 10;
         return sprites.get(sprites.size() - 1);
     }
     
@@ -192,8 +209,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     @Override
     public Sprite drawImage(Image image, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
         sprites.add(new Sprite(image, x, y, endx, endy, srcx1, srcy1, srcx2, srcy2));
-        x += 0;
-        y += 10;
         return sprites.get(sprites.size() - 1);
     }
     
@@ -205,8 +220,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
      */
     @Override
     public void moveImage(int id, int x, int y) {
-        x += 0;
-        y += 10;
         for (Sprite temp: sprites) {
             if (temp.id == id) {
                 temp.x1 = x;
@@ -227,8 +240,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
      */
     @Override
     public void moveImage(int id, int x, int y, int endx, int endy) {
-        x += 0;
-        y += 10;
         for (Sprite temp: sprites) {
             if (temp.id == id) {
                 temp.x1 = x;
@@ -253,8 +264,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
      */
     @Override
     public void moveImage(int id, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
-        x += 0;
-        y += 10;
         for (Sprite temp: sprites) {
             if (temp.id == id) {
                 temp.x1 = x;
@@ -277,8 +286,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
      */
     @Override
     public void moveImage(Image image, int x, int y) {
-        x += 0;
-        y += 10;
         for (Sprite temp: sprites) {
             if (temp.image == image) {
                 temp.x1 = x;
@@ -299,8 +306,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
      */
     @Override
     public void moveImage(Image image, int x, int y, int endx, int endy) {
-        x += 0;
-        y += 10;
         for (Sprite temp: sprites) {
             if (temp.image == image) {
                 temp.x1 = x;
@@ -325,8 +330,6 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
      */
     @Override
     public void moveImage(Image image, int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
-        x += 0;
-        y += 10;
         for (Sprite temp: sprites) {
             if (temp.image == image) {
                 temp.x1 = x;

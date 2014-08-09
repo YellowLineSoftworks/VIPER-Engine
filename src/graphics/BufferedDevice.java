@@ -20,6 +20,19 @@ public interface BufferedDevice {
     void render();
     
     /**
+     * Draws an image at the given index in the device's sprite[].
+     * @param sprite The sprite you want drawn.
+     * @param index The index to draw the sprite at.
+     */
+    void drawImage(Sprite sprite, int index);
+    
+    /**
+     * Draws an image.
+     * @param sprite The sprite you want drawn.
+     */
+    void drawImage(Sprite sprite);
+    
+    /**
      * Draws an image.
      * @param image The image you want drawn.
      * @param x The x-value of the image's upper-left corner on the destination frame.

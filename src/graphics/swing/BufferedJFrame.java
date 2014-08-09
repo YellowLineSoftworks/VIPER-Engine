@@ -126,6 +126,25 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     
     /**
      * Draws an image.
+     * @param sprite The sprite you want drawn.
+     */
+    @Override
+    public void drawImage(Sprite sprite){
+        sprites.add(sprite);
+    }
+    
+    /**
+     * Draws an image at the given index in the device's sprite[].
+     * @param sprite The sprite you want drawn.
+     * @param index The index to draw the sprite at.
+     */
+    @Override
+    public void drawImage(Sprite sprite, int index){
+        sprites.add(index, sprite);
+    }
+    
+    /**
+     * Draws an image.
      * @param image The image you want drawn.
      * @param x The x-value of the image's upper-left corner on the destination frame.
      * @param y The y-value of the image's upper-left corner on the destination frame.
