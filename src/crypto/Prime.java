@@ -69,22 +69,26 @@ public class Prime {
      * @return The generated BigInteger.
      */
     public static BigInteger getRandomBigInteger(BigInteger n) {
-        //This method could probably be optimized. Also, the randomness is compromised by using this method.
-        Random rand = new Random();
-        BigInteger output = new BigInteger(n.bitLength(), rand).add(new BigInteger("2"));
-        while(output.compareTo(n) >= 0) {
-            output = output.divide(new BigInteger("10"));
-        }
-        return output;
+        Random rnd = new Random();
+        do {
+            BigInteger i = new BigInteger(n.bitLength(), rnd).add(new BigInteger("2"));
+            if (i.compareTo(n) < 0)
+                return i;
+        } while (true);
     }
     
     /**
      * Performs the Miller-Rabin primality test on the given BigInteger n with k iterations.
      * @param n The BigInteger to perform the test on.
-     * @param k The number of times to perform the test. Error bounds is something like 4^-k.
+     * @param k Number of Miller-Rabin iterations to perform. Error bounds is something like 4^-k.
      * @return Whether or not the BigInteger is prime based on the internally generated test values.
      */
     public static boolean millerRabin(BigInteger n, int k) {
+        if (n.equals(new BigInteger("2"))) {
+            return true;
+        } else if(n.mod(new BigInteger("2")).equals(BigInteger.ZERO)) {
+            return false;
+        }
         boolean isPrime = true;
         for (int x = 0; x < k; x++) {
             if (!millerRabin(n)) {
@@ -120,28 +124,22 @@ public class Prime {
     /**
      * Performs the Solovay-Strassen primality test on the given BigInteger n with k iterations.
      * @param n The BigInteger to perform the test on.
-     * @param k The accuracy of the test.
+     * @param k Number of Solovay-Strassen iterations to perform.
      * @return Whether or not the BigInteger is prime based on the internally generated test value.
      */
     public static boolean solovayStrassen(BigInteger n, int k) {
-        if(n.mod(new BigInteger("2")).equals(BigInteger.ZERO)) {
+        if (n.equals(new BigInteger("2"))) {
+            return true;
+        } else if(n.mod(new BigInteger("2")).equals(BigInteger.ZERO)) {
             return false;
         }
         boolean isPrime = true;
         for(int c = 0; c < k; c++) {
             BigInteger a = getRandomBigInteger(n);
-            int s = 0;
-            BigInteger d = n.subtract(BigInteger.ONE);
-            //Factor out powers of two (d*(2^s) = n)
-            BigInteger[] temp = d.divideAndRemainder(new BigInteger("2"));
-            while (temp[1].equals(BigInteger.ZERO)) {
-                d = temp[0];
-                s++;
-                temp = d.divideAndRemainder(new BigInteger("2"));
-            }
             int jacobi = jacobi(a, n);
+            BigInteger jacobiModN = new BigInteger(""+jacobi).mod(n);
             BigInteger x = a.modPow(n.subtract(BigInteger.ONE).divide(new BigInteger("2")), n);
-            if (!x.equals(new BigInteger(jacobi+"")) && !x.equals(BigInteger.ZERO) ) {
+            if (!x.equals(jacobiModN) && !x.equals(BigInteger.ZERO) ) {
                 isPrime = false;
                 break;
             }
@@ -149,14 +147,19 @@ public class Prime {
         return isPrime;
     }
     
-    //BROKEN FUNCTION. Document it when you're done fixing it, please.
-    public static int jacobi(BigInteger a, BigInteger b) {
+    /**
+     * Calculates the Jacobi symbol for the given a/n.
+     * @param a The numerator of the Jacobi calculation.
+     * @param n The denominator of the Jacobi calculation.
+     * @return The Jacobi symbol for the given a/n
+     */
+    public static int jacobi(BigInteger a, BigInteger n) {
         int signsymbol = 1;
-        if (b.compareTo(BigInteger.ZERO) < 0) {
+        if (a.compareTo(BigInteger.ZERO) < 0) {
             signsymbol = -1;
-            b = b.negate();
+            a = a.negate();
         }
-        a = a.mod(b);
+        a = a.mod(n);
         int pow2 = 0;
         while (a.mod(new BigInteger("2")).equals(BigInteger.ZERO)) {
             a = a.divide(new BigInteger("2"));
@@ -164,7 +167,7 @@ public class Prime {
         }
         if (pow2 > 0) {
             int nfrom2s = 0;
-            int res = b.mod(new BigInteger("8")).intValue();
+            int res = n.mod(new BigInteger("8")).intValue();
             switch (res) {
                 case 1:
                 case 7:
@@ -183,18 +186,18 @@ public class Prime {
         if(a.equals(BigInteger.ONE)) {
             return 1*signsymbol;
         }
-        if(!a.gcd(b).equals(BigInteger.ONE)) {
+        if(!a.gcd(n).equals(BigInteger.ONE)) {
             return 0;
         }
         int asignflip = a.mod(new BigInteger("4")).intValue();
-        int bsignflip = b.mod(new BigInteger("4")).intValue();
+        int bsignflip = n.mod(new BigInteger("4")).intValue();
         if(asignflip==3&&bsignflip==3) {
             signsymbol *= -1;
-            if (signsymbol < 0) b = b.negate();
-            return jacobi(b, a);
+            if (signsymbol < 0) n = n.negate();
+            return jacobi(n, a);
         } else {
-            if (signsymbol < 0) b = b.negate();
-            return jacobi(b, a);
+            if (signsymbol < 0) n = n.negate();
+            return jacobi(n, a);
         }
     }
     
