@@ -1,7 +1,9 @@
 package crypto;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -193,6 +195,38 @@ public class Prime {
             if (signsymbol < 0) n = n.negate();
             return jacobi(n, a);
         }
+    }
+    
+    public static boolean lucas(BigInteger n) {
+        BigInteger a = getRandomBigInteger(n);
+        if (!a.modPow(n.subtract(BigInteger.ONE), n).equals(BigInteger.ONE)) {
+            return false;
+        }
+        int[] qs = primeFactors(n.subtract(BigInteger.ONE));
+        for(int q: qs) {
+            if (a.modPow(n.subtract(BigInteger.ONE).divide(new BigInteger(""+q)), n).equals(1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Get the prime factors of a BigInteger.
+     * @param n The number to factor.
+     * @return An array of the prime factors of that number.
+     */
+    public static int[] primeFactors(BigInteger n) {
+        List<BigInteger> factors = new ArrayList();
+        for (BigInteger i = new BigInteger("2"); i.compareTo(n) <= 0; i = i.add(BigInteger.ONE)) {
+          while (n.mod(i).equals(BigInteger.ZERO)) {
+            factors.add(i);
+            n = n.divide(i);
+          }
+        }
+        int[] factorInts = new int[factors.size()];
+        for(int i = 0; i < factors.size(); i++) factorInts[i] = factors.get(i).intValue();
+        return factorInts;
     }
     
 }
