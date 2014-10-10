@@ -149,8 +149,13 @@ public class Prime {
         return isPrime;
     }
     
+    //BROKEN FUNCTION. Document it when you're done fixing it, please.
     public static int jacobi(BigInteger a, BigInteger b) {
         int signsymbol = 1;
+        if (b.compareTo(BigInteger.ZERO) < 0) {
+            signsymbol = -1;
+            b = b.negate();
+        }
         a = a.mod(b);
         int pow2 = 0;
         while (a.mod(new BigInteger("2")).equals(BigInteger.ZERO)) {
@@ -173,7 +178,6 @@ public class Prime {
                     System.err.println("Denominator (n) is even!");
                     return 0;
             }
-            //Not sure if this is right. nfrom2s^pow2 might not be right, and idk if you can just mul the two anyway.
             signsymbol *= (int)Math.pow(nfrom2s, pow2);
         }
         if(a.equals(BigInteger.ONE)) {
@@ -186,11 +190,12 @@ public class Prime {
         int bsignflip = b.mod(new BigInteger("4")).intValue();
         if(asignflip==3&&bsignflip==3) {
             signsymbol *= -1;
+            if (signsymbol < 0) b = b.negate();
             return jacobi(b, a);
         } else {
+            if (signsymbol < 0) b = b.negate();
             return jacobi(b, a);
         }
-        //Execute wikipedia step 4 on jacobi page
     }
     
 }
