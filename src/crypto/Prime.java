@@ -112,7 +112,6 @@ public class Prime {
         int pow = 0;
         do {
             BigInteger res = a.modPow(d.multiply(new BigInteger((int)Math.pow(2, pow) + "")), n);
-            //Dunno if multiply by -1
             if (res.equals(n.subtract(BigInteger.ONE)) || res.equals(BigInteger.ONE)) {
                 return true;
             }
@@ -168,18 +167,13 @@ public class Prime {
         if (pow2 > 0) {
             int nfrom2s = 0;
             int res = n.mod(new BigInteger("8")).intValue();
-            switch (res) {
-                case 1:
-                case 7:
-                    nfrom2s = 1;
-                    break;
-                case 3:
-                case 5:
-                    nfrom2s = -1;
-                    break;
-                default:
-                    System.err.println("Denominator (n) is even!");
-                    return 0;
+            if(res == 1 || res == 7) {
+                nfrom2s = 1;
+            } else if (res == 3 || res == 5) {
+                nfrom2s = -1;
+            } else {
+                System.err.println("Denominator (n) is even!");
+                return 0;
             }
             signsymbol *= (int)Math.pow(nfrom2s, pow2);
         }
