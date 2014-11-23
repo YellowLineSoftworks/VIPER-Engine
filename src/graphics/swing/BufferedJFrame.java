@@ -513,7 +513,7 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
      * @return The size of the Frame as a Dimension.
      */
     public Dimension getSize() {
-        return frame.getContentPane().getSize();
+        return frame.getBounds().getSize();
     }
     
 }
