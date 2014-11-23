@@ -3,6 +3,7 @@ package game;
 import graphics.BufferedDevice;
 import graphics.awt.BufferedFrame;
 import graphics.swing.BufferedJFrame;
+import resources.GameObject;
 
 //VIPER is currently 2482 lines of code
 
@@ -137,15 +138,15 @@ public abstract class Clock implements Runnable{
 
     @Override
     public void run() {
-         long lastLoopTime = System.nanoTime();
-         long OPTIMAL_TIME = 0;
-         if (fpsCap != 0) {OPTIMAL_TIME = 1000000000 / fpsCap;}
-         long lastFpsTime = 0;
-         int fps = 0;
-         if (!initialized) {
-            init();
-            initialized = true;
-         }
+        long lastLoopTime = System.nanoTime();
+        long OPTIMAL_TIME = 0;
+        if (fpsCap != 0) {OPTIMAL_TIME = 1000000000 / fpsCap;}
+        long lastFpsTime = 0;
+        int fps = 0;
+        if (!initialized) {
+           init();
+           initialized = true;
+        }
         do {
              //Check the current time, save it
              long now = System.nanoTime();
@@ -160,6 +161,16 @@ public abstract class Clock implements Runnable{
                 lastFpsTime = 0;
                 fps = 0;
              }
+             for (int x = 0; x < GameObject.objects.size(); x++) {
+                GameObject obj = GameObject.objects.get(x);
+                if (obj.movementSpeed > 0){
+                    obj.movementCounterX += Math.cos(obj.movementAngle * (Math.PI/180)) * obj.movementSpeed;
+                    obj.movementCounterY += Math.sin(obj.movementAngle * (Math.PI/180)) * obj.movementSpeed;
+                    obj.move(obj.location.x + (int)obj.movementCounterX, obj.location.y + (int)obj.movementCounterY);
+                    obj.movementCounterX = obj.movementCounterX - (int)obj.movementCounterX;
+                    obj.movementCounterY = obj.movementCounterY - (int)obj.movementCounterY;
+                }
+             }           
              //Run the game tick
              tick();
              // draw everyting

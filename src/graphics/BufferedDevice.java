@@ -1,7 +1,10 @@
 package graphics;
 
 import game.Clock;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import resources.Sprite;
 import resources.listener.Keylistener;
 import resources.listener.Mouselistener;
@@ -179,5 +182,19 @@ public interface BufferedDevice {
      * @param mouselisten The Mouselistener to use.
      */
     void changeMouseListener(Mouselistener mouselisten);
+    
+    /**
+     * Gets the device's current keylistener.
+     * @return The device's current keylistener.
+     */
+    Keylistener getKeyListener();
+    
+    /**
+     * Gets the device's current mouselistener.
+     * @return The device's current mouselistener.
+     */
+    Mouselistener getMouseListener();
+    
+    Dimension getSize();
 
 }

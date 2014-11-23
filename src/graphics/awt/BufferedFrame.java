@@ -5,6 +5,7 @@ import game.Clock;
 import graphics.BufferedDevice;
 import static graphics.swing.BufferedJFrame.frame;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
@@ -42,8 +43,8 @@ public class BufferedFrame extends Frame implements BufferedDevice {
     private boolean fpscounter = false;
     private boolean switching = false;
     private boolean fullscreen = false;
-    private KeyListener keylistener = new DefaultKeylistener();
-    private MouseListener mouselistener = new DefaultMouselistener();
+    private Keylistener keylistener = new DefaultKeylistener();
+    private Mouselistener mouselistener = new DefaultMouselistener();
     private Clock clock;
     private int x = 0;
     private int y = 0;
@@ -486,6 +487,24 @@ public class BufferedFrame extends Frame implements BufferedDevice {
         removeKeyListener(keylistener);
         keylistener = keylisten;
         addKeyListener(keylisten);
+    }
+    
+    /**
+     * Gets the device's current mouselistener.
+     * @return The device's current mouselistener.
+     */
+    @Override
+    public Mouselistener getMouseListener() {
+        return mouselistener;
+    }
+    
+    /**
+     * Gets the device's current keylistener.
+     * @return The device's current keylistener.
+     */
+    @Override
+    public Keylistener getKeyListener() {
+        return keylistener;
     }
     
 }

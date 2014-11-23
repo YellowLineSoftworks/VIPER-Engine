@@ -4,7 +4,9 @@ import game.Clock;
 import game.Layer;
 import game.Room;
 import graphics.BufferedDevice;
+import static graphics.swing.BufferedJFrame.frame;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyListener;
@@ -37,8 +39,8 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     private boolean fpscounter = false;
     private Clock clock;
     private boolean backgroundActive = false;
-    private MouseListener mouselistener = new DefaultMouselistener();
-    private KeyListener keylistener = new DefaultKeylistener();
+    private Mouselistener mouselistener = new DefaultMouselistener();
+    private Keylistener keylistener = new DefaultKeylistener();
     
     /**
      * Creates a new BufferedJPanel. Uses default width and height and
@@ -465,6 +467,24 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
         removeKeyListener(keylistener);
         keylistener = keylisten;
         addKeyListener(keylisten);
+    }
+    
+    /**
+     * Gets the device's current mouselistener.
+     * @return The device's current mouselistener.
+     */
+    @Override
+    public Mouselistener getMouseListener() {
+        return mouselistener;
+    }
+    
+    /**
+     * Gets the device's current keylistener.
+     * @return The device's current keylistener.
+     */
+    @Override
+    public Keylistener getKeyListener() {
+        return keylistener;
     }
 
 }

@@ -3,11 +3,14 @@ package graphics.swing;
 import game.Clock;
 import graphics.BufferedDevice;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
@@ -357,7 +360,13 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
      */
     @Override
     public void clear() {
-        sprites.clear();
+        if (backgroundActive) {
+            Sprite background = sprites.get(0);
+            sprites.clear();
+            sprites.add(background);
+        } else {
+            sprites.clear();
+        }
     }
     
     /**
@@ -479,6 +488,32 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
         removeKeyListener(keylistener);
         keylistener = keylisten;
         addKeyListener(keylisten);
+    }
+    
+    /**
+     * Gets the device's current mouselistener.
+     * @return The device's current mouselistener.
+     */
+    @Override
+    public Mouselistener getMouseListener() {
+        return mouselistener;
+    }
+    
+    /**
+     * Gets the device's current keylistener.
+     * @return The device's current keylistener.
+     */
+    @Override
+    public Keylistener getKeyListener() {
+        return keylistener;
+    }
+    
+    /**
+     * Gets the size of the Frame.
+     * @return The size of the Frame as a Dimension.
+     */
+    public Dimension getSize() {
+        return frame.getContentPane().getSize();
     }
     
 }

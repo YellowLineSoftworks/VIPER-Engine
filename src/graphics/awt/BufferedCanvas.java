@@ -31,8 +31,8 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
     public static List<BufferedCanvas> canvases = new ArrayList();
     public ResolutionCalculator calc = null;
     private final List<Sprite> sprites = new ArrayList();
-    private KeyListener keylistener = new DefaultKeylistener();
-    private MouseListener mouselistener = new DefaultMouselistener();
+    private Keylistener keylistener = new DefaultKeylistener();
+    private Mouselistener mouselistener = new DefaultMouselistener();
     private BufferStrategy buffer;
     private Graphics graphics;
     private boolean fpscounter = false;
@@ -436,6 +436,24 @@ public class BufferedCanvas extends Canvas implements BufferedDevice {
         removeKeyListener(keylistener);
         keylistener = keylisten;
         addKeyListener(keylisten);
+    }
+    
+    /**
+     * Gets the device's current mouselistener.
+     * @return The device's current mouselistener.
+     */
+    @Override
+    public Mouselistener getMouseListener() {
+        return mouselistener;
+    }
+    
+    /**
+     * Gets the device's current keylistener.
+     * @return The device's current keylistener.
+     */
+    @Override
+    public Keylistener getKeyListener() {
+        return keylistener;
     }
     
 }

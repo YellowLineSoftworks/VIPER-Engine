@@ -51,9 +51,24 @@ public class GameObject {
      * Reference object for the method that executes on click, if the object is clickable.
      */
     public Object onClickReferenceObject = this;
+    /**
+     * The speed of per-tick movement of the object.
+     */
+    public double movementSpeed = 0;
+    /**
+    * The angle of per-tick movement of the object.
+    */
+    public int movementAngle = 0;
+    /**
+     * System-used. Do not modify.
+     */
+    public double movementCounterX = 0;/**
+     * System-used. Do not modify.
+     */
+    public double movementCounterY = 0;
+    public boolean bounded = false;
     private int idcounter;
-    private Point movement;
-    private final BufferedDevice device;
+    public final BufferedDevice device;
     private boolean drawn = false;
     private Graphics g = null;
     private static int idCounter = 0;
@@ -285,11 +300,12 @@ public class GameObject {
     
     /**
      * Sets the movement of the object.
-     * @param x The value to add to the x-coordinate of the top-left corner each tick.
-     * @param y The value to add to the y-coordinate of the top-left corner each tick.
+     * @param speed The speed of movement per tick.
+     * @param angle The angle of movement (cartesian plane).
      */
-    public void setMovement(int x, int y) {
-        movement = new Point(x, y);
+    public void setMovement(double speed, int angle) {
+        this.movementSpeed = speed;
+        this.movementAngle = angle;
     }
     
     
@@ -299,10 +315,23 @@ public class GameObject {
      * @param y The y-coordinate of the bottom-right corner of the destination.
      */
     public void move(int x, int y) {
-        location = new Point(x, y);
-        for(Sprite s: sprites) {
-            s.move(x, y);
+        if (x < 0 && bounded) {
+            x = 0;
         }
+        if (y < 0 && bounded) {
+            y = 0;
+        }
+        if (x + currentSprite.image.getWidth(null) > device.getSize().width) {
+            x = device.getSize().width - currentSprite.image.getWidth(null);
+        }
+        if (y + currentSprite.image.getHeight(null) > device.getSize().height) {
+            y = device.getSize().height - currentSprite.image.getHeight(null);
+        }
+        location = new Point(x, y);
+        for(int z = 0; z < sprites.length; z++) {
+            sprites[z].move(x, y);
+        }
+        device.moveImage(currentSprite.id, x, y);
     }
     
     /**
@@ -313,10 +342,23 @@ public class GameObject {
      * @param endy The y-coordinate of the bottom-right corner of the destination.
      */
     public void move(int x, int y, int endx, int endy) {
-        location = new Point(x, y);
-        for(Sprite s: sprites) {
-            s.move(x, y, endx, endy);
+        if (x < 0 && bounded) {
+            x = 0;
         }
+        if (y < 0 && bounded) {
+            y = 0;
+        }
+        if (x > device.getSize().width) {
+            x = device.getSize().width;
+        }
+        if (y > device.getSize().height) {
+            y = device.getSize().height;
+        }
+        location = new Point(x, y);
+        for(int z = 0; z < sprites.length; z++) {
+            sprites[z].move(x, y, endx, endy);
+        }
+        device.moveImage(currentSprite.id, x, y, endx, endy);
     }
     
     /**
@@ -331,10 +373,23 @@ public class GameObject {
      * @param srcy2 The y-coordinate of the bottom-right corner of the source.
      */
     public void move(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2) {
+        if (x < 0 && bounded) {
+            x = 0;
+        }
+        if (y < 0 && bounded) {
+            y = 0;
+        }
+        if (x > device.getSize().width) {
+            x = device.getSize().width;
+        }
+        if (y > device.getSize().height) {
+            y = device.getSize().height;
+        }
         location = new Point(x, y);
-        for(Sprite s: sprites) {
-            s.move(x, y, endx, endy, srcx1, srcy1, srcx2, srcy2);
+        for(int z = 0; z < sprites.length; z++) {
+            sprites[z].move(x, y, endx, endy, srcx1, srcy1, srcx2, srcy2);
         }       
+        device.moveImage(currentSprite.id, x, y, endx, endy, srcx1, srcy1, srcx2, srcy2);
     }
     
     /**
@@ -429,6 +484,14 @@ public class GameObject {
      */
     public BufferedDevice getDevice() {
         return device;
+    }
+    
+    /**
+     * Set whether or not the Object can move outside of the window.
+     * @param bounded Whether or not the Object can move outside of the window.
+     */
+    public void setBounded(boolean bounded) {
+        this.bounded = bounded;
     }
     
 }
