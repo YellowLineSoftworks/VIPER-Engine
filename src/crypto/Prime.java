@@ -63,7 +63,7 @@ public class Prime {
     /**
      * Performs a Fermat primality test on the given BigInteger.
      * @param n The BigInteger to test.
-     * @param a The BigInteger to use as a test value, given that a < n.
+     * @param a The BigInteger to use as a test value, given that a is larger than n.
      * @return True if n is a Fermat probable prime using the given number a, or false if not.
      */
     public static boolean fermat(BigInteger n, BigInteger a) {
