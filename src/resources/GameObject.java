@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.List;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -267,13 +268,15 @@ public class GameObject {
      * @param images An array of the images to change to.
      */
     public void changeSprites(Image[] images) {
+        device.removeImage(currentSprite.id);
         Sprite[] newSprites = new Sprite[images.length];
         for (int c = 0; c < images.length; c++) {
             newSprites[c] = new Sprite(images[c], sprites[0].x1, sprites[0].y1, sprites[0].x1 + images[c].getWidth(null), 
-                    sprites[0].y1 + images[c].getHeight(null), 0, 0, images[c].getWidth(null), images[c].getWidth(null));
+                    sprites[0].y1 + images[c].getHeight(null), 0, 0, images[c].getWidth(null), images[c].getHeight(null));
         }
         sprites = newSprites;
         currentSprite = sprites[0];
+        draw();
     }
     
     /**
@@ -289,13 +292,14 @@ public class GameObject {
      * @param images The images that the object can display.
      */
     public void changeSprites(int x, int y, int endx, int endy, int srcx1, int srcy1, int srcx2, int srcy2, Image[] images) {
+        device.removeImage(currentSprite.id);
         this.location = new Point(x,y);
         this.sprites = new Sprite[images.length];
         for (int c = 0; c < images.length; c++) {
             sprites[c] = new Sprite(images[c], x, y, endx, endy, srcx1, srcy1, srcx2, srcy2);
         }
         currentSprite = sprites[0];
-        objects.add(this);
+        draw();
     }
     
     /**
@@ -492,6 +496,14 @@ public class GameObject {
      */
     public void setBounded(boolean bounded) {
         this.bounded = bounded;
+    }
+    
+    /**
+     * Returns the bounds of the current sprite.
+     * @return The bounds of the current sprite as a Rectangle.
+     */
+    public Rectangle getObjectBounds() {
+        return new Rectangle(location.x, location.y, currentSprite.image.getWidth(null), currentSprite.image.getHeight(null));
     }
     
 }
