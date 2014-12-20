@@ -3,6 +3,9 @@ package game;
 import graphics.BufferedDevice;
 import graphics.awt.BufferedFrame;
 import graphics.swing.BufferedJFrame;
+import graphics3D.Room3D;
+import java.util.ArrayList;
+import java.util.List;
 import resources.GameObject;
 
 //VIPER is currently 2482 lines of code
@@ -10,7 +13,7 @@ import resources.GameObject;
 /**
  * The application time handler. Manages FPS and game ticks.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public abstract class Clock implements Runnable{
     
@@ -26,9 +29,9 @@ public abstract class Clock implements Runnable{
      * The BufferedDevices being used.
      */
     public BufferedDevice[] bufferedDevices;
-    
-    private boolean initialized = false, threadRunning = true;
+    private boolean initialized = false, threadRunning = true, enabled3D = false;
     private Thread main;
+    private List<Room3D> rooms = new ArrayList();
     
     /**
      * This function runs when you start the application. Put your
@@ -138,6 +141,7 @@ public abstract class Clock implements Runnable{
 
     @Override
     public void run() {
+        
         long lastLoopTime = System.nanoTime();
         long OPTIMAL_TIME = 0;
         if (fpsCap != 0) {OPTIMAL_TIME = 1000000000 / fpsCap;}
@@ -170,10 +174,14 @@ public abstract class Clock implements Runnable{
                     obj.movementCounterX = obj.movementCounterX - (int)obj.movementCounterX;
                     obj.movementCounterY = obj.movementCounterY - (int)obj.movementCounterY;
                 }
-             }           
+             }
              //Run the game tick
              tick();
-             // draw everyting
+             //Draw all 3D images inside of the buffereddevices, if necessary
+             for (Room3D r: rooms) {
+                 r.render();
+             }
+             // draw everything
              for (int c = 0; c < bufferedDevices.length; c++) {
                  bufferedDevices[c].render();
              }
@@ -187,6 +195,18 @@ public abstract class Clock implements Runnable{
                 }
              }
         } while (threadRunning);
+    
+    }
+    
+    /**
+     * Enables 3D rendering for the selected room.
+     * @param room The room to enable 3D for.
+     */
+    public void enable3D(Room3D room) {
+        
+        rooms.add(room);
+        enabled3D = true;
+        
     }
     
 }

@@ -12,6 +12,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -26,7 +27,7 @@ import resources.listener.Mouselistener;
  * An extension of the JFrame class with built-in double-buffered
  * image drawing and manipulation functions.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class BufferedJFrame extends JFrame implements BufferedDevice {
     
@@ -40,13 +41,14 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     private Keylistener keylistener = new DefaultKeylistener();
     private BufferStrategy buffer;
     private Graphics graphics;
-    private boolean fpscounter = false;
+    private boolean fpscounter = false, enabled3D = false;
     private boolean switching = false;
     private boolean fullscreen = false;
     private Clock clock;
     private int x = 0;
     private int y = 0;
     private boolean backgroundActive = false;
+    private Sprite canvas3D;
     
     /**
      * Creates a new BufferedJFrame. Uses default mouse and key listeners.
@@ -68,7 +70,7 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
         frame.setIgnoreRepaint(true);
         frame.createBufferStrategy(2);
         buffer = frame.getBufferStrategy();
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
     /**
@@ -107,23 +109,23 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     @Override
     public void render() {
         if (!switching) {
-        graphics = buffer.getDrawGraphics();
-        graphics.setColor(new Color (255,255,255));
-        graphics.fillRect(0, 0, frame.getWidth(), frame.getHeight());
-        for (int c = 0; c < sprites.size(); c++) {
-            Sprite temp = sprites.get(c);
-            if (calc != null) {
-                graphics.drawImage(temp.image, calc.calcForX(temp.x1), calc.calcForY(temp.y1), calc.calcForX(temp.x2), calc.calcForY(temp.y2), temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
-            } else {
-                graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+            graphics = buffer.getDrawGraphics();
+            graphics.setColor(new Color (255,255,255));
+            graphics.fillRect(0, 0, frame.getWidth(), frame.getHeight());
+            for (int c = 0; c < sprites.size(); c++) {
+                Sprite temp = sprites.get(c);
+                if (calc != null) {
+                    graphics.drawImage(temp.image, calc.calcForX(temp.x1), calc.calcForY(temp.y1), calc.calcForX(temp.x2), calc.calcForY(temp.y2), temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+                } else {
+                    graphics.drawImage(temp.image, temp.x1, temp.y1, temp.x2, temp.y2, temp.sx1, temp.sy1, temp.sx2, temp.sy2, null);
+                }
             }
-	}
-        if (fpscounter) {
-            graphics.setColor(new Color (0,0,0));
-            graphics.drawString(clock.fps + "", 20, 50);
-        } 
-        graphics.dispose();
-        buffer.show();
+            if (fpscounter) {
+                graphics.setColor(new Color (0,0,0));
+                graphics.drawString(clock.fps + "", 20, 50);
+            } 
+            graphics.dispose();
+            buffer.show();
         }
     }
     
@@ -515,5 +517,50 @@ public class BufferedJFrame extends JFrame implements BufferedDevice {
     public Dimension getSize() {
         return frame.getBounds().getSize();
     }
+    
+    /**
+     * Gets whether 3D is enabled for the device.
+     * @return Whether or not 3D is enabled for the device.
+     */
+    @Override
+    public boolean get3DEnabled() {
+        return enabled3D;
+    }
+    
+    /**
+     * Sets whether 3D is enabled for the device.
+     * @param enabled3D Whether or not to enable 3D for the device.
+     */
+    @Override
+    public void set3DEnabled(boolean enabled3D) {
+        if (enabled3D) {
+            canvas3D = new Sprite(new BufferedImage(BufferedImage.TYPE_INT_ARGB, getSize().width, getSize().height), 0, 0);
+            if (backgroundActive) {
+                sprites.add(1, canvas3D);
+            } else {
+                sprites.add(0, canvas3D);
+            }
+        } else {
+            if (this.enabled3D && backgroundActive) {
+                sprites.remove(1);
+            } else if (this.enabled3D) {
+                sprites.remove(0);
+            }
+        }
+        this.enabled3D = enabled3D;
+    }
+    
+    /**
+     * Gets the canvas that the 3D engine is drawing on. Returns null if 3D is not enabled.
+     * @return The Sprite that is being used as the 3D canvas.
+     */
+    public Sprite get3DCanvas() {
+        if (get3DEnabled()) {
+            return canvas3D;
+        } else {
+            return null;
+        }
+    }
+    
     
 }

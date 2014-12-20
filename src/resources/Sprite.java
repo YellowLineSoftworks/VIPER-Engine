@@ -6,7 +6,7 @@ import java.awt.Image;
 /**
  * An extended Image containing coordinates and an identifier.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class Sprite {
     

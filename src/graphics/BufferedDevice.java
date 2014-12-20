@@ -13,7 +13,7 @@ import resources.listener.Mouselistener;
  * BufferedDevices are GUI components with built-in image drawing
  * and manipulation functions.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public interface BufferedDevice {
     
@@ -195,6 +195,28 @@ public interface BufferedDevice {
      */
     Mouselistener getMouseListener();
     
+    /**
+     * Gets the size of the window.
+     * @return The size of the window as a Dimension.
+     */
     Dimension getSize();
-
+    
+    /**
+     * Gets whether 3D is enabled for the device.
+     * @return Whether or not 3D is enabled for the device.
+     */
+    boolean get3DEnabled();
+    
+    /**
+     * Sets whether 3D is enabled for the device.
+     * @param enabled3D Whether 3d is to be enabled for the device.
+     */
+    void set3DEnabled(boolean enabled3D);
+    
+    /**
+     * Gets the canvas that the 3D engine is drawing on. Returns null if 3D is not enabled.
+     * @return The Sprite that is being used as the 3D canvas.
+     */
+    Sprite get3DCanvas();
+    
 }

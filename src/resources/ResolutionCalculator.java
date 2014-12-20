@@ -9,7 +9,7 @@ import java.awt.Rectangle;
 /**
  * A ResolutionCalculator, given a source resolution, can calculate dimensions for any target resolution.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class ResolutionCalculator {
     

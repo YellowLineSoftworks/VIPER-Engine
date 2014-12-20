@@ -14,7 +14,7 @@ import resources.Sprite;
  * houses all of the Sprites and GameObjects, and discriminates between the two by means of a second array of integers representing
  * the indexes that are Sprites.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class Layer {
     

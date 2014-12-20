@@ -11,7 +11,7 @@ import resources.GameObject;
 /**
  * The Button parent class.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class Button extends GameObject {
     

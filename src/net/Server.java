@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * The Server is a package that connects to Clients and transfers data.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class Server implements Runnable{
     

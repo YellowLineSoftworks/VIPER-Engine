@@ -9,7 +9,7 @@ import java.net.Socket;
 /**
  * A Client is an object that can create and modify Server connections.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class Client {
     

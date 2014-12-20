@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * A class that stores passwords securely.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class Password {
     

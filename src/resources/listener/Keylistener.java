@@ -3,7 +3,7 @@ package resources.listener;
 /**
  * A parent key listener class.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 
 import java.awt.event.KeyListener;

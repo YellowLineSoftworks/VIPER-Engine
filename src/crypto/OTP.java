@@ -12,7 +12,7 @@ import java.util.Scanner;
 /**
  * A collection of methods to encrypt data via OTP-Blacklight.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class OTP {
     

@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 /**
  * FileRetrievers retrieve files from the game storage folder.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class FileRetriever {
     

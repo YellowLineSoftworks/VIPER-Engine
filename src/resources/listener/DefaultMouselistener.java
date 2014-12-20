@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 /**
  * A default mouse listener class. Contains empty functions.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class DefaultMouselistener extends Mouselistener {
     

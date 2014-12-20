@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * A class containing functions for generating primes and testing primality.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class Prime {
     

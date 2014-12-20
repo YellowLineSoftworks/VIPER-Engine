@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -27,7 +28,7 @@ import resources.listener.Mouselistener;
  * An extension of the JPanel class with built-in double-buffered
  * image drawing and manipulation functions.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class BufferedJPanel extends JPanel implements BufferedDevice {
 
@@ -36,11 +37,12 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     private final List<Sprite> sprites = new ArrayList();
     private Room currentRoom = new Room(this);
     private Graphics graphics;
-    private boolean fpscounter = false;
+    private boolean fpscounter = false, enabled3D = false;
     private Clock clock;
     private boolean backgroundActive = false;
     private Mouselistener mouselistener = new DefaultMouselistener();
     private Keylistener keylistener = new DefaultKeylistener();
+    private Sprite canvas3D;
     
     /**
      * Creates a new BufferedJPanel. Uses default width and height and
@@ -485,6 +487,50 @@ public class BufferedJPanel extends JPanel implements BufferedDevice {
     @Override
     public Keylistener getKeyListener() {
         return keylistener;
+    }
+    
+    /**
+     * Gets whether 3D is enabled for the device.
+     * @return Whether or not 3D is enabled for the device.
+     */
+    @Override
+    public boolean get3DEnabled() {
+        return enabled3D;
+    }
+    
+    /**
+     * Sets whether 3D is enabled for the device. Enables the rendering canvas for 3D images. Automatically triggered if a room is created.
+     * @param enabled3D Whether or not to enable 3D for the device.
+     */
+    @Override
+    public void set3DEnabled(boolean enabled3D) {
+        if (enabled3D) {
+            canvas3D = new Sprite(new BufferedImage(BufferedImage.TYPE_INT_ARGB, getSize().width, getSize().height), 0, 0);
+            if (backgroundActive) {
+                sprites.add(1, canvas3D);
+            } else {
+                sprites.add(0, canvas3D);
+            }
+        } else {
+            if (this.enabled3D && backgroundActive) {
+                sprites.remove(1);
+            } else if (this.enabled3D) {
+                sprites.remove(0);
+            }
+        }
+        this.enabled3D = enabled3D;
+    }
+    
+    /**
+     * Gets the canvas that the 3D engine is drawing on. Returns null if 3D is not enabled.
+     * @return The Sprite that is being used as the 3D canvas.
+     */
+    public Sprite get3DCanvas() {
+        if (get3DEnabled()) {
+            return canvas3D;
+        } else {
+            return null;
+        }
     }
 
 }

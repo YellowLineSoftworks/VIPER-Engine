@@ -10,7 +10,7 @@ import resources.Sprite;
 /**
  * Rooms are collections of Layers and GameObjects. The class contains functions to add and remove objects, as well as switch the displayed room.
  * @author Jack
- * @version 1.4 Alpha
+ * @version 1.5 Alpha
  */
 public class Room {
     
